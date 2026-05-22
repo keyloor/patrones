@@ -1,0 +1,6 @@
+{
+  "name": "calc-estudio",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/study_tool.html" }
+  ]
+}
