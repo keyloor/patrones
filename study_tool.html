@@ -1,330 +1,1055 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Patrones de Diseño — IF0006 Desarrollo de Software III</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --bg: #0d0e10;
-    --bg-soft: #14161a;
-    --bg-card: #181a1f;
-    --bg-elevated: #1f2228;
-    --border: #2a2d34;
-    --border-soft: #1f2228;
-    --text: #ecebe8;
-    --text-soft: #b6b3ac;
-    --text-mute: #797672;
-    --amber: #748eb8;
-    --amber-soft: #5d749a;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patrones de Diseño — IF0006 Desarrollo de Software III</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d0e10;
+        --bg-soft: #14161a;
+        --bg-card: #181a1f;
+        --bg-elevated: #1f2228;
+        --border: #2a2d34;
+        --border-soft: #1f2228;
+        --text: #ecebe8;
+        --text-soft: #b6b3ac;
+        --text-mute: #797672;
+        --amber: #748eb8;
+        --amber-soft: #5d749a;
 
-    /* Categorías */
-    --crea: #748eb8;  /* azul desaturado — creacionales */
-    --estr: #7fb8a8;  /* verde menta — estructurales */
-    --comp: #c89bd9;  /* lila — comportamiento */
+        /* Categorías */
+        --crea: #748eb8; /* azul desaturado — creacionales */
+        --estr: #7fb8a8; /* verde menta — estructurales */
+        --comp: #c89bd9; /* lila — comportamiento */
 
-    --display: 'Outfit', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
-    --body: 'Inter', sans-serif;
-  }
+        --display: "Outfit", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+        --body: "Inter", sans-serif;
+      }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 15px; line-height: 1.6; }
-  body {
-    background-image:
-      radial-gradient(circle at 15% 10%, rgba(212,165,116,0.04), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(127,184,168,0.03), transparent 40%);
-    min-height: 100vh;
-  }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--body);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      body {
+        background-image:
+          radial-gradient(
+            circle at 15% 10%,
+            rgba(116, 142, 184, 0.06),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 80%,
+            rgba(127, 184, 168, 0.03),
+            transparent 40%
+          );
+        min-height: 100vh;
+      }
 
-  /* === Layout === */
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 60px 32px 80px; }
+      /* === Layout === */
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 32px 80px;
+      }
 
-  /* === Header === */
-  header { margin-bottom: 48px; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
-  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
-  h1 { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 8px; }
-  h1 em { font-style: italic; color: var(--amber); font-weight: 400; }
-  .subtitle { font-family: var(--display); font-style: italic; font-size: 1.25rem; color: var(--text-soft); font-weight: 400; }
-  .meta { display: flex; gap: 24px; margin-top: 18px; font-family: var(--mono); font-size: 11px; color: var(--text-mute); letter-spacing: 0.06em; flex-wrap: wrap; }
-  .meta span::before { content: '◆ '; color: var(--amber); margin-right: 4px; }
+      /* === Header === */
+      header {
+        margin-bottom: 48px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 32px;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-family: var(--display);
+        font-size: clamp(2.4rem, 5vw, 3.6rem);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+        margin-bottom: 8px;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--amber);
+        font-weight: 400;
+      }
+      .subtitle {
+        font-family: var(--display);
+        font-style: italic;
+        font-size: 1.25rem;
+        color: var(--text-soft);
+        font-weight: 400;
+      }
+      .meta {
+        display: flex;
+        gap: 24px;
+        margin-top: 18px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-mute);
+        letter-spacing: 0.06em;
+        flex-wrap: wrap;
+      }
+      .meta span::before {
+        content: "◆ ";
+        color: var(--amber);
+        margin-right: 4px;
+      }
 
-  /* === Tabs === */
-  .tabs { display: flex; gap: 4px; margin-bottom: 36px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .tab { background: none; border: none; color: var(--text-mute); padding: 14px 18px; font-family: var(--body); font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; letter-spacing: 0.02em; }
-  .tab:hover { color: var(--text-soft); }
-  .tab.active { color: var(--amber); border-bottom-color: var(--amber); }
-  .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+      /* === Tabs === */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 36px;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+      }
+      .tab {
+        background: none;
+        border: none;
+        color: var(--text-mute);
+        padding: 14px 18px;
+        font-family: var(--body);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        letter-spacing: 0.02em;
+      }
+      .tab:hover {
+        color: var(--text-soft);
+      }
+      .tab.active {
+        color: var(--amber);
+        border-bottom-color: var(--amber);
+      }
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-  /* === Tipografía interna === */
-  h2 { font-family: var(--display); font-size: 2rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px; }
-  h2 em { font-style: italic; color: var(--amber); }
-  h3 { font-family: var(--display); font-size: 1.4rem; font-weight: 500; margin-bottom: 12px; color: var(--text); }
-  h4 { font-family: var(--body); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--amber); font-weight: 600; margin-bottom: 10px; }
-  p { color: var(--text-soft); margin-bottom: 14px; }
-  .lead { font-family: var(--display); font-style: italic; font-size: 1.2rem; color: var(--text-soft); margin-bottom: 32px; max-width: 760px; }
+      /* === Tipografía interna === */
+      h2 {
+        font-family: var(--display);
+        font-size: 2rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        margin-bottom: 8px;
+      }
+      h2 em {
+        font-style: italic;
+        color: var(--amber);
+      }
+      h3 {
+        font-family: var(--display);
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin-bottom: 12px;
+        color: var(--text);
+      }
+      h4 {
+        font-family: var(--body);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--amber);
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      p {
+        color: var(--text-soft);
+        margin-bottom: 14px;
+      }
+      .lead {
+        font-family: var(--display);
+        font-style: italic;
+        font-size: 1.2rem;
+        color: var(--text-soft);
+        margin-bottom: 32px;
+        max-width: 760px;
+      }
 
-  /* === Bloques de código === */
-  pre { background: #0a0b0d; border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; overflow-x: auto; margin: 14px 0; font-family: var(--mono); font-size: 13px; line-height: 1.65; }
-  code { font-family: var(--mono); font-size: 0.9em; }
-  pre code { color: #e8e6df; }
-  :not(pre) > code { background: var(--bg-elevated); padding: 2px 6px; border-radius: 3px; color: var(--amber); border: 1px solid var(--border); font-size: 12.5px; }
-  .k { color: #c89bd9; }        /* keywords */
-  .t { color: #7fb8a8; }        /* types */
-  .s { color: #d4a574; }        /* strings */
-  .c { color: #6b6862; font-style: italic; } /* comments */
-  .m { color: #b6e2c8; }        /* methods */
-  .n { color: #d4a4c8; }        /* numbers */
+      /* === Bloques de código === */
+      pre {
+        background: #0a0b0d;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 18px 20px;
+        overflow-x: auto;
+        margin: 14px 0;
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 1.65;
+      }
+      code {
+        font-family: var(--mono);
+        font-size: 0.9em;
+      }
+      pre code {
+        color: #e8e6df;
+      }
+      :not(pre) > code {
+        background: var(--bg-elevated);
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: var(--amber);
+        border: 1px solid var(--border);
+        font-size: 12.5px;
+      }
+      .k {
+        color: #c89bd9;
+      } /* keywords */
+      .t {
+        color: #7fb8a8;
+      } /* types */
+      .s {
+        color: #d4a574;
+      } /* strings */
+      .c {
+        color: #6b6862;
+        font-style: italic;
+      } /* comments */
+      .m {
+        color: #b6e2c8;
+      } /* methods */
+      .n {
+        color: #d4a4c8;
+      } /* numbers */
 
-  /* === Cards generales === */
-  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; margin-bottom: 18px; }
-  .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
-  @media (max-width: 760px) { .card-row { grid-template-columns: 1fr; } }
+      /* === Cards generales === */
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 28px;
+        margin-bottom: 18px;
+      }
+      .card-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+      @media (max-width: 760px) {
+        .card-row {
+          grid-template-columns: 1fr;
+        }
+      }
 
-  /* === Badges de categoría === */
-  .badge { display: inline-block; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; padding: 4px 10px; border-radius: 3px; font-weight: 500; }
-  .badge-crea { background: rgba(212,165,116,0.12); color: var(--crea); border: 1px solid rgba(212,165,116,0.3); }
-  .badge-estr { background: rgba(127,184,168,0.12); color: var(--estr); border: 1px solid rgba(127,184,168,0.3); }
-  .badge-comp { background: rgba(200,155,217,0.12); color: var(--comp); border: 1px solid rgba(200,155,217,0.3); }
+      /* === Badges de categoría === */
+      .badge {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 4px 10px;
+        border-radius: 3px;
+        font-weight: 500;
+      }
+      .badge-crea {
+        background: rgba(116, 142, 184, 0.12);
+        color: var(--crea);
+        border: 1px solid rgba(116, 142, 184, 0.3);
+      }
+      .badge-estr {
+        background: rgba(127, 184, 168, 0.12);
+        color: var(--estr);
+        border: 1px solid rgba(127, 184, 168, 0.3);
+      }
+      .badge-comp {
+        background: rgba(200, 155, 217, 0.12);
+        color: var(--comp);
+        border: 1px solid rgba(200, 155, 217, 0.3);
+      }
 
-  /* === Intro === */
-  .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
-  @media (max-width: 880px) { .intro-grid { grid-template-columns: 1fr; } }
-  .intro-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; position: relative; overflow: hidden; }
-  .intro-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-  .intro-card.crea::before { background: var(--crea); }
-  .intro-card.estr::before { background: var(--estr); }
-  .intro-card.comp::before { background: var(--comp); }
-  .intro-card h3 { font-family: var(--display); font-size: 1.6rem; }
-  .intro-card .desc { color: var(--text-soft); font-size: 14px; margin: 12px 0 18px; }
-  .intro-card ul { list-style: none; }
-  .intro-card li { font-family: var(--mono); font-size: 12px; color: var(--text-mute); padding: 4px 0; border-bottom: 1px dashed var(--border-soft); }
-  .intro-card li:last-child { border-bottom: none; }
-  .intro-card li::before { content: '— '; color: var(--text-mute); }
+      /* === Intro === */
+      .intro-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 28px;
+      }
+      @media (max-width: 880px) {
+        .intro-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .intro-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      .intro-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+      .intro-card.crea::before {
+        background: var(--crea);
+      }
+      .intro-card.estr::before {
+        background: var(--estr);
+      }
+      .intro-card.comp::before {
+        background: var(--comp);
+      }
+      .intro-card h3 {
+        font-family: var(--display);
+        font-size: 1.6rem;
+      }
+      .intro-card .desc {
+        color: var(--text-soft);
+        font-size: 14px;
+        margin: 12px 0 18px;
+      }
+      .intro-card ul {
+        list-style: none;
+      }
+      .intro-card li {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-mute);
+        padding: 4px 0;
+        border-bottom: 1px dashed var(--border-soft);
+      }
+      .intro-card li:last-child {
+        border-bottom: none;
+      }
+      .intro-card li::before {
+        content: "— ";
+        color: var(--text-mute);
+      }
 
-  /* === Pattern Details === */
-  .pattern { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
-  .pattern-header { padding: 24px 28px; border-bottom: 1px solid var(--border); position: relative; }
-  .pattern-header::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-  .pattern.crea .pattern-header::before { background: var(--crea); }
-  .pattern.estr .pattern-header::before { background: var(--estr); }
-  .pattern.comp .pattern-header::before { background: var(--comp); }
-  .pattern-header h3 { font-family: var(--display); font-size: 2rem; font-weight: 600; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .pattern-header .definition { font-family: var(--display); font-style: italic; font-size: 1.1rem; color: var(--text-soft); margin-top: 8px; }
-  .pattern-body { padding: 28px; }
-  .pattern-section { margin-bottom: 28px; }
-  .pattern-section:last-child { margin-bottom: 0; }
+      /* === Pattern Details === */
+      .pattern {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 24px;
+        overflow: hidden;
+      }
+      .pattern-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+      .pattern-header::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+      }
+      .pattern.crea .pattern-header::before {
+        background: var(--crea);
+      }
+      .pattern.estr .pattern-header::before {
+        background: var(--estr);
+      }
+      .pattern.comp .pattern-header::before {
+        background: var(--comp);
+      }
+      .pattern-header h3 {
+        font-family: var(--display);
+        font-size: 2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .pattern-header .definition {
+        font-family: var(--display);
+        font-style: italic;
+        font-size: 1.1rem;
+        color: var(--text-soft);
+        margin-top: 8px;
+      }
+      .pattern-body {
+        padding: 28px;
+      }
+      .pattern-section {
+        margin-bottom: 28px;
+      }
+      .pattern-section:last-child {
+        margin-bottom: 0;
+      }
 
-  /* === Participantes === */
-  .participants { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .participant { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 5px; padding: 14px 16px; }
-  .participant .name { font-family: var(--mono); font-size: 12px; color: var(--amber); margin-bottom: 4px; font-weight: 600; }
-  .participant .role { font-size: 13px; color: var(--text-soft); }
+      /* === Participantes === */
+      .participants {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .participant {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 14px 16px;
+      }
+      .participant .name {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--amber);
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+      .participant .role {
+        font-size: 13px;
+        color: var(--text-soft);
+      }
 
-  /* === Aplicabilidad === */
-  .applicability { background: rgba(212,165,116,0.05); border-left: 2px solid var(--amber); padding: 14px 20px; border-radius: 0 5px 5px 0; }
-  .applicability p { color: var(--text-soft); margin-bottom: 0; font-style: italic; font-family: var(--display); font-size: 1.05rem; }
+      /* === Aplicabilidad === */
+      .applicability {
+        background: rgba(116, 142, 184, 0.08);
+        border-left: 2px solid var(--amber);
+        padding: 14px 20px;
+        border-radius: 0 5px 5px 0;
+      }
+      .applicability p {
+        color: var(--text-soft);
+        margin-bottom: 0;
+        font-style: italic;
+        font-family: var(--display);
+        font-size: 1.05rem;
+      }
 
-  /* === Tabla comparativa === */
-  table { width: 100%; border-collapse: collapse; margin: 14px 0; }
-  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
-  th { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 500; }
-  td { color: var(--text-soft); }
+      /* === Tabla comparativa === */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0;
+      }
+      th,
+      td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+      }
+      th {
+        font-family: var(--mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--amber);
+        font-weight: 500;
+      }
+      td {
+        color: var(--text-soft);
+      }
 
-  /* === Flashcards === */
-  .deck-controls { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
-  .filter-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-soft); padding: 8px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
-  .filter-btn:hover { color: var(--text); border-color: var(--text-soft); }
-  .filter-btn.active { background: var(--amber); color: var(--bg); border-color: var(--amber); }
-  .counter { font-family: var(--mono); font-size: 11px; color: var(--text-mute); margin-left: auto; }
+      /* === Flashcards === */
+      .deck-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .filter-btn {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-soft);
+        padding: 8px 14px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .filter-btn:hover {
+        color: var(--text);
+        border-color: var(--text-soft);
+      }
+      .filter-btn.active {
+        background: var(--amber);
+        color: var(--bg);
+        border-color: var(--amber);
+      }
+      .counter {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-mute);
+        margin-left: auto;
+      }
 
-  .flashcard-container { perspective: 1200px; min-height: 320px; margin-bottom: 24px; }
-  .flashcard { position: relative; width: 100%; min-height: 320px; transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-  .flashcard.flipped { transform: rotateY(180deg); }
-  .flashcard-face { position: absolute; width: 100%; min-height: 320px; backface-visibility: hidden; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
-  .flashcard-back { transform: rotateY(180deg); justify-content: flex-start; padding-top: 40px; }
-  .flashcard-face .badge { position: absolute; top: 20px; right: 22px; }
-  .flashcard-face .num { position: absolute; top: 20px; left: 22px; font-family: var(--mono); font-size: 11px; color: var(--text-mute); }
-  .flashcard-front h3 { font-family: var(--display); font-size: 2rem; text-align: center; font-weight: 500; }
-  .flashcard-front .hint { font-family: var(--mono); font-size: 10px; color: var(--text-mute); text-align: center; margin-top: 12px; letter-spacing: 0.15em; text-transform: uppercase; }
-  .flashcard-back .answer-label { font-family: var(--mono); font-size: 10px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
-  .flashcard-back .answer { color: var(--text); font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
-  .flashcard-back .answer:last-child { margin-bottom: 0; }
-  .flashcard-back pre { font-size: 11.5px; margin: 8px 0; }
+      .flashcard-container {
+        perspective: 1200px;
+        min-height: 320px;
+        margin-bottom: 24px;
+      }
+      .flashcard {
+        position: relative;
+        width: 100%;
+        min-height: 320px;
+        transform-style: preserve-3d;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+      .flashcard.flipped {
+        transform: rotateY(180deg);
+      }
+      .flashcard-face {
+        position: absolute;
+        width: 100%;
+        min-height: 320px;
+        backface-visibility: hidden;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .flashcard-back {
+        transform: rotateY(180deg);
+        justify-content: flex-start;
+        padding-top: 40px;
+      }
+      .flashcard-face .badge {
+        position: absolute;
+        top: 20px;
+        right: 22px;
+      }
+      .flashcard-face .num {
+        position: absolute;
+        top: 20px;
+        left: 22px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-mute);
+      }
+      .flashcard-front h3 {
+        font-family: var(--display);
+        font-size: 2rem;
+        text-align: center;
+        font-weight: 500;
+      }
+      .flashcard-front .hint {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-mute);
+        text-align: center;
+        margin-top: 12px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+      .flashcard-back .answer-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--amber);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        margin-bottom: 8px;
+      }
+      .flashcard-back .answer {
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 14px;
+      }
+      .flashcard-back .answer:last-child {
+        margin-bottom: 0;
+      }
+      .flashcard-back pre {
+        font-size: 11.5px;
+        margin: 8px 0;
+      }
 
-  .deck-nav { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
-  .nav-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-soft); padding: 10px 20px; font-family: var(--body); font-size: 13px; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
-  .nav-btn:hover:not(:disabled) { background: var(--amber); color: var(--bg); border-color: var(--amber); }
-  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+      .deck-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+      }
+      .nav-btn {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-soft);
+        padding: 10px 20px;
+        font-family: var(--body);
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: all 0.2s;
+      }
+      .nav-btn:hover:not(:disabled) {
+        background: var(--amber);
+        color: var(--bg);
+        border-color: var(--amber);
+      }
+      .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
 
-  /* === Quiz === */
-  .quiz-q { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin-bottom: 16px; }
-  .quiz-q .q-num { font-family: var(--mono); font-size: 11px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
-  .quiz-q .q-text { font-size: 15px; color: var(--text); margin-bottom: 18px; line-height: 1.5; }
-  .quiz-q .options { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-q .option { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; cursor: pointer; transition: all 0.2s; color: var(--text-soft); font-size: 13.5px; }
-  .quiz-q .option:hover:not(.disabled) { border-color: var(--amber); color: var(--text); }
-  .quiz-q .option.correct { background: rgba(127,184,168,0.12); border-color: var(--estr); color: var(--estr); }
-  .quiz-q .option.wrong { background: rgba(220,100,100,0.1); border-color: #c66; color: #d99; }
-  .quiz-q .option.disabled { cursor: default; }
-  .quiz-q .explanation { margin-top: 14px; padding: 12px 16px; background: var(--bg-elevated); border-left: 2px solid var(--amber); border-radius: 0 4px 4px 0; font-size: 13px; color: var(--text-soft); display: none; }
-  .quiz-q .explanation.show { display: block; }
-  .quiz-score { background: var(--bg-elevated); border: 1px solid var(--amber); border-radius: 8px; padding: 24px 28px; text-align: center; margin-top: 20px; display: none; }
-  .quiz-score.show { display: block; }
-  .quiz-score h3 { font-family: var(--display); color: var(--amber); }
-  .quiz-score .score-num { font-family: var(--display); font-size: 3rem; color: var(--amber); margin: 10px 0; }
-  .quiz-btn { background: var(--amber); color: var(--bg); border: none; padding: 12px 28px; font-family: var(--body); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 3px; cursor: pointer; margin-top: 14px; transition: all 0.2s; }
-  .quiz-btn:hover { background: var(--amber-soft); }
+      /* === Quiz === */
+      .quiz-q {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 24px 28px;
+        margin-bottom: 16px;
+      }
+      .quiz-q .q-num {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--amber);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .quiz-q .q-text {
+        font-size: 15px;
+        color: var(--text);
+        margin-bottom: 18px;
+        line-height: 1.5;
+      }
+      .quiz-q .options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .quiz-q .option {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--text-soft);
+        font-size: 13.5px;
+      }
+      .quiz-q .option:hover:not(.disabled) {
+        border-color: var(--amber);
+        color: var(--text);
+      }
+      .quiz-q .option.correct {
+        background: rgba(127, 184, 168, 0.12);
+        border-color: var(--estr);
+        color: var(--estr);
+      }
+      .quiz-q .option.wrong {
+        background: rgba(220, 100, 100, 0.1);
+        border-color: #c66;
+        color: #d99;
+      }
+      .quiz-q .option.disabled {
+        cursor: default;
+      }
+      .quiz-q .explanation {
+        margin-top: 14px;
+        padding: 12px 16px;
+        background: var(--bg-elevated);
+        border-left: 2px solid var(--amber);
+        border-radius: 0 4px 4px 0;
+        font-size: 13px;
+        color: var(--text-soft);
+        display: none;
+      }
+      .quiz-q .explanation.show {
+        display: block;
+      }
+      .quiz-score {
+        background: var(--bg-elevated);
+        border: 1px solid var(--amber);
+        border-radius: 8px;
+        padding: 24px 28px;
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+      }
+      .quiz-score.show {
+        display: block;
+      }
+      .quiz-score h3 {
+        font-family: var(--display);
+        color: var(--amber);
+      }
+      .quiz-score .score-num {
+        font-family: var(--display);
+        font-size: 3rem;
+        color: var(--amber);
+        margin: 10px 0;
+      }
+      .quiz-btn {
+        background: var(--amber);
+        color: var(--bg);
+        border: none;
+        padding: 12px 28px;
+        font-family: var(--body);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-top: 14px;
+        transition: all 0.2s;
+      }
+      .quiz-btn:hover {
+        background: var(--amber-soft);
+      }
 
-  /* === Catálogo GoF === */
-  .catalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-  .catalog-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; position: relative; }
-  .catalog-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; }
-  .catalog-item.crea::before { background: var(--crea); }
-  .catalog-item.estr::before { background: var(--estr); }
-  .catalog-item.comp::before { background: var(--comp); }
-  .catalog-item .name { font-family: var(--display); font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; }
-  .catalog-item .desc { font-size: 12.5px; color: var(--text-soft); line-height: 1.5; }
-  .catalog-item .seen { font-family: var(--mono); font-size: 10px; color: var(--amber); margin-top: 6px; letter-spacing: 0.1em; }
+      /* === Catálogo GoF === */
+      .catalog {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+      .catalog-item {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 16px 18px;
+        position: relative;
+      }
+      .catalog-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+      }
+      .catalog-item.crea::before {
+        background: var(--crea);
+      }
+      .catalog-item.estr::before {
+        background: var(--estr);
+      }
+      .catalog-item.comp::before {
+        background: var(--comp);
+      }
+      .catalog-item .name {
+        font-family: var(--display);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .catalog-item .desc {
+        font-size: 12.5px;
+        color: var(--text-soft);
+        line-height: 1.5;
+      }
+      .catalog-item .seen {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--amber);
+        margin-top: 6px;
+        letter-spacing: 0.1em;
+      }
 
-  /* === Practica guiada === */
-  .practice { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; padding: 18px 22px; margin-top: 14px; }
-  .practice h4 { color: var(--amber); margin-bottom: 8px; }
-  .practice ol, .practice ul { padding-left: 22px; color: var(--text-soft); font-size: 13.5px; }
-  .practice li { margin-bottom: 4px; }
+      /* === Practica guiada === */
+      .practice {
+        background: var(--bg-elevated);
+        border: 1px dashed var(--border);
+        border-radius: 6px;
+        padding: 18px 22px;
+        margin-top: 14px;
+      }
+      .practice h4 {
+        color: var(--amber);
+        margin-bottom: 8px;
+      }
+      .practice ol,
+      .practice ul {
+        padding-left: 22px;
+        color: var(--text-soft);
+        font-size: 13.5px;
+      }
+      .practice li {
+        margin-bottom: 4px;
+      }
 
-  /* === Cheatsheet === */
-  .cheat-section { margin-bottom: 36px; }
-  .cheat-section h3 { font-family: var(--display); font-size: 1.6rem; font-weight: 500; margin-bottom: 12px; }
-  .cheat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 760px) { .cheat-grid { grid-template-columns: 1fr; } }
-  .cheat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
-  .cheat-box h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; }
-  .cheat-box ul { list-style: none; padding-left: 0; }
-  .cheat-box li { font-size: 13px; color: var(--text-soft); padding: 5px 0; border-bottom: 1px dashed var(--border-soft); }
-  .cheat-box li:last-child { border-bottom: none; }
-  .cheat-box strong { color: var(--amber); font-weight: 500; }
+      /* === Cheatsheet === */
+      .cheat-section {
+        margin-bottom: 36px;
+      }
+      .cheat-section h3 {
+        font-family: var(--display);
+        font-size: 1.6rem;
+        font-weight: 500;
+        margin-bottom: 12px;
+      }
+      .cheat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 760px) {
+        .cheat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .cheat-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 18px 20px;
+      }
+      .cheat-box h4 {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+      }
+      .cheat-box ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .cheat-box li {
+        font-size: 13px;
+        color: var(--text-soft);
+        padding: 5px 0;
+        border-bottom: 1px dashed var(--border-soft);
+      }
+      .cheat-box li:last-child {
+        border-bottom: none;
+      }
+      .cheat-box strong {
+        color: var(--amber);
+        font-weight: 500;
+      }
 
-  /* === Footer === */
-  footer { margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); text-align: center; font-family: var(--mono); font-size: 10px; color: var(--text-mute); letter-spacing: 0.12em; }
+      /* === Footer === */
+      footer {
+        margin-top: 60px;
+        padding-top: 28px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-mute);
+        letter-spacing: 0.12em;
+      }
 
-  /* small UI fix */
-  .right { text-align: right; }
-  .center { text-align: center; }
-  .hidden { display: none !important; }
-</style>
-</head>
-<body>
-<div class="wrap">
+      /* small UI fix */
+      .right {
+        text-align: right;
+      }
+      .center {
+        text-align: center;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- ===== HEADER ===== -->
+      <header>
+        <div class="eyebrow">
+          IF0006 · Desarrollo de Software III · I Ciclo 2026
+        </div>
+        <h1>Patrones de <em>Diseño</em></h1>
+        <p class="subtitle">
+          Soluciones recurrentes a problemas comunes en el diseño de software
+        </p>
+        <div class="meta">
+          <span>Tema 3.2 del programa</span>
+          <span>Basado en presentación del curso</span>
+          <span>Estudio activo</span>
+        </div>
+      </header>
 
-<!-- ===== HEADER ===== -->
-<header>
-  <div class="eyebrow">IF0006 · Desarrollo de Software III · I Ciclo 2026</div>
-  <h1>Patrones de <em>Diseño</em></h1>
-  <p class="subtitle">Soluciones recurrentes a problemas comunes en el diseño de software</p>
-  <div class="meta">
-    <span>Tema 3.2 del programa</span>
-    <span>Basado en presentación del curso</span>
-    <span>Estudio activo</span>
-  </div>
-</header>
-
-<!-- ===== TABS ===== -->
-<div class="tabs">
-  <button class="tab active" data-tab="intro">Introducción</button>
-  <button class="tab" data-tab="creational">Creacionales</button>
-  <button class="tab" data-tab="structural">Estructurales</button>
-  <button class="tab" data-tab="behavioral">Comportamiento</button>
-  <button class="tab" data-tab="catalog">Catálogo GoF</button>
-  <button class="tab" data-tab="flashcards">Flashcards</button>
-  <button class="tab" data-tab="quiz">Quiz</button>
-  <button class="tab" data-tab="cheat">Cheatsheet</button>
-</div>
-
-<!-- ============================================== -->
-<!-- ===== INTRO ===== -->
-<!-- ============================================== -->
-<section class="tab-content active" id="intro">
-  <h2>¿Qué es un patrón <em>de diseño</em>?</h2>
-  <p class="lead">Los patrones de diseño son soluciones o técnicas típicas a problemas comunes en el diseño de software. Son como planos prediseñados que puedes personalizar para resolver problemas recurrentes en tu código.</p>
-
-  <div class="card">
-    <h4>Idea clave</h4>
-    <p>El patrón <strong style="color:var(--amber)">no es un fragmento de código específico</strong>, sino un concepto general para resolver un problema específico. Cada patrón describe una estructura que se adapta al contexto.</p>
-  </div>
-
-  <h3 style="margin-top:36px">Clasificación por propósito</h3>
-  <p>Los patrones varían en complejidad, nivel de detalle y escala de aplicabilidad. Se clasifican en tres grandes familias:</p>
-
-  <div class="intro-grid">
-    <div class="intro-card crea">
-      <span class="badge badge-crea">Creational</span>
-      <h3 style="margin-top:14px">Creacionales</h3>
-      <p class="desc">Proporcionan mecanismos de creación de objetos que aumentan la flexibilidad y reutilización del código existente.</p>
-      <ul>
-        <li>Cómo crear objetos eficientemente</li>
-        <li>Ocultar la lógica de instanciación</li>
-        <li>Reducir el acoplamiento</li>
-      </ul>
-      <p style="margin-top:14px;font-size:12px;color:var(--text-mute)"><em>Vistos en clase:</em> Singleton, Factory Method, Abstract Factory</p>
-    </div>
-
-    <div class="intro-card estr">
-      <span class="badge badge-estr">Structural</span>
-      <h3 style="margin-top:14px">Estructurales</h3>
-      <p class="desc">Explican cómo ensamblar objetos y clases en estructuras más grandes, manteniéndolas flexibles y eficientes.</p>
-      <ul>
-        <li>Ensamblar objetos en estructuras</li>
-        <li>Garantizar flexibilidad ante cambios</li>
-        <li>Si una parte cambia, no se rompe el todo</li>
-      </ul>
-      <p style="margin-top:14px;font-size:12px;color:var(--text-mute)"><em>Vistos en clase:</em> Adapter, Facade</p>
-    </div>
-
-    <div class="intro-card comp">
-      <span class="badge badge-comp">Behavioral</span>
-      <h3 style="margin-top:14px">Comportamiento</h3>
-      <p class="desc">Se encargan de la comunicación efectiva y la asignación de responsabilidades entre objetos.</p>
-      <ul>
-        <li>Comunicación entre objetos</li>
-        <li>Asignación de responsabilidades</li>
-        <li>Algoritmos intercambiables</li>
-      </ul>
-      <p style="margin-top:14px;font-size:12px;color:var(--text-mute)"><em>Vistos en clase:</em> Observer</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================== -->
-<!-- ===== CREACIONALES ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="creational">
-  <h2><em>Patrones</em> Creacionales</h2>
-  <p class="lead">Mecanismos de creación de objetos que aumentan flexibilidad y reutilización del código existente.</p>
-
-  <!-- ===== SINGLETON ===== -->
-  <div class="pattern crea">
-    <div class="pattern-header">
-      <h3>Singleton <span class="badge badge-crea">Creacional</span></h3>
-      <p class="definition">Asegura que una clase tenga una <em>única instancia</em>, y proporciona un punto de acceso global a dicha instancia.</p>
-    </div>
-    <div class="pattern-body">
-
-      <div class="pattern-section">
-        <h4>Implementación · pasos clave</h4>
-        <ol style="padding-left:22px;color:var(--text-soft);font-size:14px;line-height:1.8">
-          <li>Añadir un atributo <code>static</code> privado a la clase para almacenar la instancia Singleton (de tipo Singleton).</li>
-          <li>Declarar el constructor como <code>private</code>. El método estático seguirá pudiendo invocarlo.</li>
-          <li>Declarar un método estático público (<code>getInstance()</code>) que: verifica si la instancia ya fue creada y la devuelve, o la crea si todavía no existe.</li>
-        </ol>
+      <!-- ===== TABS ===== -->
+      <div class="tabs">
+        <button class="tab active" data-tab="intro">Introducción</button>
+        <button class="tab" data-tab="creational">Creacionales</button>
+        <button class="tab" data-tab="structural">Estructurales</button>
+        <button class="tab" data-tab="behavioral">Comportamiento</button>
+        <button class="tab" data-tab="catalog">Catálogo GoF</button>
+        <button class="tab" data-tab="flashcards">Flashcards</button>
+        <button class="tab" data-tab="quiz">Quiz</button>
+        <button class="tab" data-tab="cheat">Cheatsheet</button>
       </div>
 
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="k">public class</span> <span class="t">GameConfig</span> {
+      <!-- ============================================== -->
+      <!-- ===== INTRO ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content active" id="intro">
+        <h2>¿Qué es un patrón <em>de diseño</em>?</h2>
+        <p class="lead">
+          Los patrones de diseño son soluciones o técnicas típicas a problemas
+          comunes en el diseño de software. Son como planos prediseñados que
+          puedes personalizar para resolver problemas recurrentes en tu código.
+        </p>
+
+        <div class="card">
+          <h4>Idea clave</h4>
+          <p>
+            El patrón
+            <strong style="color: var(--amber)"
+              >no es un fragmento de código específico</strong
+            >, sino un concepto general para resolver un problema específico.
+            Cada patrón describe una estructura que se adapta al contexto.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 36px">Clasificación por propósito</h3>
+        <p>
+          Los patrones varían en complejidad, nivel de detalle y escala de
+          aplicabilidad. Se clasifican en tres grandes familias:
+        </p>
+
+        <div class="intro-grid">
+          <div class="intro-card crea">
+            <span class="badge badge-crea">Creational</span>
+            <h3 style="margin-top: 14px">Creacionales</h3>
+            <p class="desc">
+              Proporcionan mecanismos de creación de objetos que aumentan la
+              flexibilidad y reutilización del código existente.
+            </p>
+            <ul>
+              <li>Cómo crear objetos eficientemente</li>
+              <li>Ocultar la lógica de instanciación</li>
+              <li>Reducir el acoplamiento</li>
+            </ul>
+            <p
+              style="margin-top: 14px; font-size: 12px; color: var(--text-mute)"
+            >
+              <em>Vistos en clase:</em> Singleton, Factory Method, Abstract
+              Factory
+            </p>
+          </div>
+
+          <div class="intro-card estr">
+            <span class="badge badge-estr">Structural</span>
+            <h3 style="margin-top: 14px">Estructurales</h3>
+            <p class="desc">
+              Explican cómo ensamblar objetos y clases en estructuras más
+              grandes, manteniéndolas flexibles y eficientes.
+            </p>
+            <ul>
+              <li>Ensamblar objetos en estructuras</li>
+              <li>Garantizar flexibilidad ante cambios</li>
+              <li>Si una parte cambia, no se rompe el todo</li>
+            </ul>
+            <p
+              style="margin-top: 14px; font-size: 12px; color: var(--text-mute)"
+            >
+              <em>Vistos en clase:</em> Adapter, Facade
+            </p>
+          </div>
+
+          <div class="intro-card comp">
+            <span class="badge badge-comp">Behavioral</span>
+            <h3 style="margin-top: 14px">Comportamiento</h3>
+            <p class="desc">
+              Se encargan de la comunicación efectiva y la asignación de
+              responsabilidades entre objetos.
+            </p>
+            <ul>
+              <li>Comunicación entre objetos</li>
+              <li>Asignación de responsabilidades</li>
+              <li>Algoritmos intercambiables</li>
+            </ul>
+            <p
+              style="margin-top: 14px; font-size: 12px; color: var(--text-mute)"
+            >
+              <em>Vistos en clase:</em> Observer
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ===== CREACIONALES ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="creational">
+        <h2><em>Patrones</em> Creacionales</h2>
+        <p class="lead">
+          Mecanismos de creación de objetos que aumentan flexibilidad y
+          reutilización del código existente.
+        </p>
+
+        <!-- ===== SINGLETON ===== -->
+        <div class="pattern crea">
+          <div class="pattern-header">
+            <h3>Singleton <span class="badge badge-crea">Creacional</span></h3>
+            <p class="definition">
+              Asegura que una clase tenga una <em>única instancia</em>, y
+              proporciona un punto de acceso global a dicha instancia.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Implementación · pasos clave</h4>
+              <ol
+                style="
+                  padding-left: 22px;
+                  color: var(--text-soft);
+                  font-size: 14px;
+                  line-height: 1.8;
+                "
+              >
+                <li>
+                  Añadir un atributo <code>static</code> privado a la clase para
+                  almacenar la instancia Singleton (de tipo Singleton).
+                </li>
+                <li>
+                  Declarar el constructor como <code>private</code>. El método
+                  estático seguirá pudiendo invocarlo.
+                </li>
+                <li>
+                  Declarar un método estático público
+                  (<code>getInstance()</code>) que: verifica si la instancia ya
+                  fue creada y la devuelve, o la crea si todavía no existe.
+                </li>
+              </ol>
+            </div>
+
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="k">public class</span> <span class="t">GameConfig</span> {
     <span class="c">// 1) atributo estático privado</span>
     <span class="k">private static</span> <span class="t">GameConfig</span> instance;
 
@@ -345,63 +1070,122 @@
 
     <span class="c">// get / set / showConfig...</span>
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Problema</h4>
-        <p>En un videojuego con configuraciones globales (dificultad, jugadores, velocidad de enemigos) cada subsistema podría crear su propia <code>GameConfig</code>, generando inconsistencias y reglas impredecibles.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Problema</h4>
+              <p>
+                En un videojuego con configuraciones globales (dificultad,
+                jugadores, velocidad de enemigos) cada subsistema podría crear
+                su propia <code>GameConfig</code>, generando inconsistencias y
+                reglas impredecibles.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Solución</h4>
-        <p>El Singleton garantiza que <code>GameConfig</code> sea única y accesible globalmente: todos los módulos llaman a <code>GameConfig.getInstance()</code> y reciben la misma instancia. Las reglas no pueden divergir.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Solución</h4>
+              <p>
+                El Singleton garantiza que <code>GameConfig</code> sea única y
+                accesible globalmente: todos los módulos llaman a
+                <code>GameConfig.getInstance()</code> y reciben la misma
+                instancia. Las reglas no pueden divergir.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Casos de uso</h4>
-        <p>Configuración global de una aplicación · Conexiones a bases de datos · Loggers · Caches compartidos</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Casos de uso</h4>
+              <p>
+                Configuración global de una aplicación · Conexiones a bases de
+                datos · Loggers · Caches compartidos
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Aplicabilidad</h4>
-        <div class="applicability">
-          <p>Utiliza Singleton cuando una clase de tu programa solo debe tener una instancia disponible para todos los clientes; por ejemplo, un único objeto de base de datos compartido por distintas partes del programa.</p>
+            <div class="pattern-section">
+              <h4>Aplicabilidad</h4>
+              <div class="applicability">
+                <p>
+                  Utiliza Singleton cuando una clase de tu programa solo debe
+                  tener una instancia disponible para todos los clientes; por
+                  ejemplo, un único objeto de base de datos compartido por
+                  distintas partes del programa.
+                </p>
+              </div>
+            </div>
+
+            <div class="practice">
+              <h4>Práctica guiada del curso</h4>
+              <ol>
+                <li>
+                  Crear <code>GameConfig</code> (atributos
+                  <code>difficulty, lives, enemySpeed</code>, set/get, método
+                  <code>showConfig()</code>) implementando Singleton.
+                </li>
+                <li>
+                  Crear <code>EnemySystem</code> (usa
+                  <code>getEnemySpeed</code>) y <code>PlayerSystem</code> (usa
+                  <code>getLives</code>).
+                </li>
+                <li>
+                  Cada sistema obtiene la configuración con
+                  <code>GameConfig.getInstance()</code>.
+                </li>
+                <li>
+                  En <code>Main</code>: configurar valores, obtener la
+                  configuración global, crear los dos sistemas y demostrar que
+                  ambos comparten la misma instancia.
+                </li>
+              </ol>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso</h4>
-        <ol>
-          <li>Crear <code>GameConfig</code> (atributos <code>difficulty, lives, enemySpeed</code>, set/get, método <code>showConfig()</code>) implementando Singleton.</li>
-          <li>Crear <code>EnemySystem</code> (usa <code>getEnemySpeed</code>) y <code>PlayerSystem</code> (usa <code>getLives</code>).</li>
-          <li>Cada sistema obtiene la configuración con <code>GameConfig.getInstance()</code>.</li>
-          <li>En <code>Main</code>: configurar valores, obtener la configuración global, crear los dos sistemas y demostrar que ambos comparten la misma instancia.</li>
-        </ol>
-      </div>
-    </div>
-  </div>
+        <!-- ===== FACTORY METHOD ===== -->
+        <div class="pattern crea">
+          <div class="pattern-header">
+            <h3>
+              Factory Method <span class="badge badge-crea">Creacional</span>
+            </h3>
+            <p class="definition">
+              Proporciona una interfaz para crear objetos en una
+              <em>superclase</em>, pero permite que las subclases decidan qué
+              tipo de objeto instanciar.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Participantes</h4>
+              <div class="participants">
+                <div class="participant">
+                  <div class="name">Producto</div>
+                  <div class="role">
+                    Interfaz común para los objetos creados por el Factory
+                    Method.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">ProductoConcreto</div>
+                  <div class="role">Implementa la interfaz Producto.</div>
+                </div>
+                <div class="participant">
+                  <div class="name">Creador</div>
+                  <div class="role">
+                    Clase abstracta que declara el método de fábrica abstracto
+                    (<code>crearProducto()</code>), que devuelve un Producto.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">CreadorConcreto</div>
+                  <div class="role">
+                    Sobrescribe el método de fábrica para devolver un
+                    ProductoConcreto.
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <!-- ===== FACTORY METHOD ===== -->
-  <div class="pattern crea">
-    <div class="pattern-header">
-      <h3>Factory Method <span class="badge badge-crea">Creacional</span></h3>
-      <p class="definition">Proporciona una interfaz para crear objetos en una <em>superclase</em>, pero permite que las subclases decidan qué tipo de objeto instanciar.</p>
-    </div>
-    <div class="pattern-body">
-
-      <div class="pattern-section">
-        <h4>Participantes</h4>
-        <div class="participants">
-          <div class="participant"><div class="name">Producto</div><div class="role">Interfaz común para los objetos creados por el Factory Method.</div></div>
-          <div class="participant"><div class="name">ProductoConcreto</div><div class="role">Implementa la interfaz Producto.</div></div>
-          <div class="participant"><div class="name">Creador</div><div class="role">Clase abstracta que declara el método de fábrica abstracto (<code>crearProducto()</code>), que devuelve un Producto.</div></div>
-          <div class="participant"><div class="name">CreadorConcreto</div><div class="role">Sobrescribe el método de fábrica para devolver un ProductoConcreto.</div></div>
-        </div>
-      </div>
-
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="c">// Producto</span>
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="c">// Producto</span>
 <span class="k">public interface</span> <span class="t">Payment</span> {
     <span class="k">void</span> <span class="m">processPayment</span>(<span class="k">double</span> amount);
 }
@@ -436,59 +1220,114 @@
         <span class="k">return new</span> <span class="t">PaypalPayment</span>();
     }
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Problema</h4>
-        <p>Una aplicación de gestión logística que solo soporta transporte en camión, con la mayor parte del código dentro de la clase <code>Camión</code>. Cuando llegan solicitudes para transporte marítimo, hay que refactorizar para permitir nuevos tipos sin alterar la estructura existente.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Problema</h4>
+              <p>
+                Una aplicación de gestión logística que solo soporta transporte
+                en camión, con la mayor parte del código dentro de la clase
+                <code>Camión</code>. Cuando llegan solicitudes para transporte
+                marítimo, hay que refactorizar para permitir nuevos tipos sin
+                alterar la estructura existente.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Solución</h4>
-        <p>En lugar de llamar al operador <code>new</code> para construir objetos directamente, se invoca a un método fábrica especial. Las subclases pueden sobrescribirlo para devolver el tipo específico que necesitan.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Solución</h4>
+              <p>
+                En lugar de llamar al operador <code>new</code> para construir
+                objetos directamente, se invoca a un método fábrica especial.
+                Las subclases pueden sobrescribirlo para devolver el tipo
+                específico que necesitan.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Aplicabilidad</h4>
-        <div class="applicability">
-          <p>Utiliza Factory Method cuando no conozcas de antemano las dependencias y los tipos exactos de los objetos con los que deba funcionar tu código.</p>
+            <div class="pattern-section">
+              <h4>Aplicabilidad</h4>
+              <div class="applicability">
+                <p>
+                  Utiliza Factory Method cuando no conozcas de antemano las
+                  dependencias y los tipos exactos de los objetos con los que
+                  deba funcionar tu código.
+                </p>
+              </div>
+            </div>
+
+            <div class="practice">
+              <h4>Práctica guiada del curso</h4>
+              <ol>
+                <li>
+                  Sistema de procesamiento de pagos aplicando el patrón Factory.
+                </li>
+                <li>
+                  Métodos de pago soportados: <code>Tarjeta de crédito</code> y
+                  <code>PayPal</code>, con un <code>processPayment()</code>.
+                </li>
+                <li>
+                  Crear los productos abstractos y concretos, y lo mismo para la
+                  fábrica.
+                </li>
+                <li><code>Main</code>: probar ambas fábricas.</li>
+              </ol>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso</h4>
-        <ol>
-          <li>Sistema de procesamiento de pagos aplicando el patrón Factory.</li>
-          <li>Métodos de pago soportados: <code>Tarjeta de crédito</code> y <code>PayPal</code>, con un <code>processPayment()</code>.</li>
-          <li>Crear los productos abstractos y concretos, y lo mismo para la fábrica.</li>
-          <li><code>Main</code>: probar ambas fábricas.</li>
-        </ol>
-      </div>
-    </div>
-  </div>
+        <!-- ===== ABSTRACT FACTORY ===== -->
+        <div class="pattern crea">
+          <div class="pattern-header">
+            <h3>
+              Abstract Factory <span class="badge badge-crea">Creacional</span>
+            </h3>
+            <p class="definition">
+              Crea <em>familias de objetos relacionados</em> que deben ser
+              compatibles entre sí, sin especificar sus clases concretas.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Participantes</h4>
+              <div class="participants">
+                <div class="participant">
+                  <div class="name">FábricaAbstracta</div>
+                  <div class="role">
+                    Interfaz para operaciones que crean objetos producto
+                    abstractos.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">FábricaConcreta</div>
+                  <div class="role">
+                    Implementa las operaciones para crear objetos producto
+                    concretos.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">ProductoAbstracto</div>
+                  <div class="role">
+                    Interfaz para un tipo de objeto producto.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">ProductoConcreto</div>
+                  <div class="role">
+                    Define un objeto producto creado por la fábrica
+                    correspondiente.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Cliente</div>
+                  <div class="role">
+                    Solo usa interfaces de FábricaAbstracta y ProductoAbstracto.
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <!-- ===== ABSTRACT FACTORY ===== -->
-  <div class="pattern crea">
-    <div class="pattern-header">
-      <h3>Abstract Factory <span class="badge badge-crea">Creacional</span></h3>
-      <p class="definition">Crea <em>familias de objetos relacionados</em> que deben ser compatibles entre sí, sin especificar sus clases concretas.</p>
-    </div>
-    <div class="pattern-body">
-
-      <div class="pattern-section">
-        <h4>Participantes</h4>
-        <div class="participants">
-          <div class="participant"><div class="name">FábricaAbstracta</div><div class="role">Interfaz para operaciones que crean objetos producto abstractos.</div></div>
-          <div class="participant"><div class="name">FábricaConcreta</div><div class="role">Implementa las operaciones para crear objetos producto concretos.</div></div>
-          <div class="participant"><div class="name">ProductoAbstracto</div><div class="role">Interfaz para un tipo de objeto producto.</div></div>
-          <div class="participant"><div class="name">ProductoConcreto</div><div class="role">Define un objeto producto creado por la fábrica correspondiente.</div></div>
-          <div class="participant"><div class="name">Cliente</div><div class="role">Solo usa interfaces de FábricaAbstracta y ProductoAbstracto.</div></div>
-        </div>
-      </div>
-
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="c">// Productos abstractos</span>
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="c">// Productos abstractos</span>
 <span class="k">public interface</span> <span class="t">Moneda</span> { <span class="k">void</span> <span class="m">mostrar</span>(); }
 <span class="k">public interface</span> <span class="t">BloqueInterrogante</span> { <span class="k">void</span> <span class="m">mostrar</span>(); }
 
@@ -521,80 +1360,165 @@
         <span class="k">return new</span> <span class="t">GameBoyBloqueInterrogante</span>();
     }
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Problema</h4>
-        <p>Un simulador de tienda de muebles con (1) una familia de productos relacionados — Silla + Sofá + Mesa de centro — y (2) varias variantes — Moderna, Victoriana, Art Déco. Los clientes se enfadan cuando reciben muebles que no combinan.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Problema</h4>
+              <p>
+                Un simulador de tienda de muebles con (1) una familia de
+                productos relacionados — Silla + Sofá + Mesa de centro — y (2)
+                varias variantes — Moderna, Victoriana, Art Déco. Los clientes
+                se enfadan cuando reciben muebles que no combinan.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Solución</h4>
-        <p>Primero, crear interfaces para cada producto (Silla, Sofá, Mesilla). Luego declarar una Fábrica abstracta con métodos para crear todos los productos de la familia (<code>crearSilla</code>, <code>crearSofá</code>, <code>crearMesilla</code>). Para cada variante (Moderna, Victoriana...) crear una clase de fábrica independiente: la <code>FábricaDeMueblesModernos</code> solo crea objetos modernos.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Solución</h4>
+              <p>
+                Primero, crear interfaces para cada producto (Silla, Sofá,
+                Mesilla). Luego declarar una Fábrica abstracta con métodos para
+                crear todos los productos de la familia
+                (<code>crearSilla</code>, <code>crearSofá</code>,
+                <code>crearMesilla</code>). Para cada variante (Moderna,
+                Victoriana...) crear una clase de fábrica independiente: la
+                <code>FábricaDeMueblesModernos</code> solo crea objetos
+                modernos.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Abstract Factory <em>vs</em> Factory Method</h4>
-        <table>
-          <tr><th>Abstract Factory</th><th>Factory Method</th></tr>
-          <tr>
-            <td>Define una interfaz para crear <strong>múltiples productos relacionados</strong>.</td>
-            <td>Delega la creación de <strong>un solo producto</strong> a subclases.</td>
-          </tr>
-          <tr>
-            <td>Garantiza que los productos sean compatibles (todos premium o todos estándar).</td>
-            <td>Decide qué clase concreta instanciar.</td>
-          </tr>
-        </table>
-      </div>
+            <div class="pattern-section">
+              <h4>Abstract Factory <em>vs</em> Factory Method</h4>
+              <table>
+                <tr>
+                  <th>Abstract Factory</th>
+                  <th>Factory Method</th>
+                </tr>
+                <tr>
+                  <td>
+                    Define una interfaz para crear
+                    <strong>múltiples productos relacionados</strong>.
+                  </td>
+                  <td>
+                    Delega la creación de <strong>un solo producto</strong> a
+                    subclases.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Garantiza que los productos sean compatibles (todos premium
+                    o todos estándar).
+                  </td>
+                  <td>Decide qué clase concreta instanciar.</td>
+                </tr>
+              </table>
+            </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso (Nintendo)</h4>
-        <ol>
-          <li>Interfaz <code>AbstractFactory</code> con <code>createMoneda()</code> y <code>createBloqueInterrogante()</code>.</li>
-          <li>Productos concretos: <code>GameBoyMoneda</code>, <code>GameBoyBloqueInterrogante</code>, <code>NintendoDSMoneda</code>, <code>NintendoDSBloqueInterrogante</code>.</li>
-          <li>Fábricas concretas: <code>GameBoyItemFactory</code>, <code>NintendoDSItemFactory</code> (cada una crea los productos de su familia).</li>
-          <li><code>Main</code>: probar ambas fábricas demostrando que el cliente trabaja con diferentes familias sin depender de clases concretas.</li>
-        </ol>
-        <p style="margin-top:10px;color:var(--text-mute);font-size:12px"><em>Ejercicio extra:</em> fábrica de chocolates (Premium / Estándar) produciendo Tabletas, Bombones y Barras.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================== -->
-<!-- ===== ESTRUCTURALES ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="structural">
-  <h2><em>Patrones</em> Estructurales</h2>
-  <p class="lead">Cómo ensamblar objetos y clases en estructuras más grandes manteniéndolas flexibles y eficientes. Si una parte cambia, no es necesario cambiar toda la estructura.</p>
-
-  <!-- ===== ADAPTER ===== -->
-  <div class="pattern estr">
-    <div class="pattern-header">
-      <h3>Adapter <span class="badge badge-estr">Estructural</span></h3>
-      <p class="definition">Convierte la interfaz de una clase en otra distinta que es la que esperan los clientes. Permite que cooperen clases que de otra manera no podrían por tener interfaces incompatibles, <em>sin modificar la clase original</em>.</p>
-    </div>
-    <div class="pattern-body">
-
-      <div class="pattern-section">
-        <h4>Idea central</h4>
-        <p>Hacer que dos clases que no hablan el mismo "idioma" puedan trabajar juntas.</p>
-      </div>
-
-      <div class="pattern-section">
-        <h4>Participantes</h4>
-        <div class="participants">
-          <div class="participant"><div class="name">Cliente</div><div class="role">La parte del programa que quiere usar un objeto.</div></div>
-          <div class="participant"><div class="name">Objetivo-Cliente (Interfaz)</div><div class="role">Define la interfaz específica del dominio que usa o quiere el Cliente.</div></div>
-          <div class="participant"><div class="name">Adaptable</div><div class="role">Clase existente que necesita ser adaptada. Es lo que ya se tiene y <strong>no se puede cambiar</strong> ("vieja").</div></div>
-          <div class="participant"><div class="name">Adaptador</div><div class="role">Adapta la interfaz del Adaptable a la interfaz Objetivo.</div></div>
+            <div class="practice">
+              <h4>Práctica guiada del curso (Nintendo)</h4>
+              <ol>
+                <li>
+                  Interfaz <code>AbstractFactory</code> con
+                  <code>createMoneda()</code> y
+                  <code>createBloqueInterrogante()</code>.
+                </li>
+                <li>
+                  Productos concretos: <code>GameBoyMoneda</code>,
+                  <code>GameBoyBloqueInterrogante</code>,
+                  <code>NintendoDSMoneda</code>,
+                  <code>NintendoDSBloqueInterrogante</code>.
+                </li>
+                <li>
+                  Fábricas concretas: <code>GameBoyItemFactory</code>,
+                  <code>NintendoDSItemFactory</code> (cada una crea los
+                  productos de su familia).
+                </li>
+                <li>
+                  <code>Main</code>: probar ambas fábricas demostrando que el
+                  cliente trabaja con diferentes familias sin depender de clases
+                  concretas.
+                </li>
+              </ol>
+              <p
+                style="
+                  margin-top: 10px;
+                  color: var(--text-mute);
+                  font-size: 12px;
+                "
+              >
+                <em>Ejercicio extra:</em> fábrica de chocolates (Premium /
+                Estándar) produciendo Tabletas, Bombones y Barras.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="c">// Interfaz Objetivo: lo que el cliente espera</span>
+      <!-- ============================================== -->
+      <!-- ===== ESTRUCTURALES ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="structural">
+        <h2><em>Patrones</em> Estructurales</h2>
+        <p class="lead">
+          Cómo ensamblar objetos y clases en estructuras más grandes
+          manteniéndolas flexibles y eficientes. Si una parte cambia, no es
+          necesario cambiar toda la estructura.
+        </p>
+
+        <!-- ===== ADAPTER ===== -->
+        <div class="pattern estr">
+          <div class="pattern-header">
+            <h3>Adapter <span class="badge badge-estr">Estructural</span></h3>
+            <p class="definition">
+              Convierte la interfaz de una clase en otra distinta que es la que
+              esperan los clientes. Permite que cooperen clases que de otra
+              manera no podrían por tener interfaces incompatibles,
+              <em>sin modificar la clase original</em>.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Idea central</h4>
+              <p>
+                Hacer que dos clases que no hablan el mismo "idioma" puedan
+                trabajar juntas.
+              </p>
+            </div>
+
+            <div class="pattern-section">
+              <h4>Participantes</h4>
+              <div class="participants">
+                <div class="participant">
+                  <div class="name">Cliente</div>
+                  <div class="role">
+                    La parte del programa que quiere usar un objeto.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Objetivo-Cliente (Interfaz)</div>
+                  <div class="role">
+                    Define la interfaz específica del dominio que usa o quiere
+                    el Cliente.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Adaptable</div>
+                  <div class="role">
+                    Clase existente que necesita ser adaptada. Es lo que ya se
+                    tiene y <strong>no se puede cambiar</strong> ("vieja").
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Adaptador</div>
+                  <div class="role">
+                    Adapta la interfaz del Adaptable a la interfaz Objetivo.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="c">// Interfaz Objetivo: lo que el cliente espera</span>
 <span class="k">public interface</span> <span class="t">Messenger</span> {
     <span class="k">void</span> <span class="m">sendMessage</span>(<span class="t">String</span> msg);
 }
@@ -627,68 +1551,128 @@
         api.<span class="m">sendWhatsApp</span>(phoneNumber, msg);   <span class="c">// traduce la llamada</span>
     }
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Problema</h4>
-        <p>Una aplicación de monitoreo del mercado de valores que descarga información de bolsa en formato XML. Al querer integrar una biblioteca de análisis, descubres que solo funciona con datos en JSON. La biblioteca es externa: no se puede modificar.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Problema</h4>
+              <p>
+                Una aplicación de monitoreo del mercado de valores que descarga
+                información de bolsa en formato XML. Al querer integrar una
+                biblioteca de análisis, descubres que solo funciona con datos en
+                JSON. La biblioteca es externa: no se puede modificar.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Solución</h4>
-        <p>Crear un adaptador: un objeto especial que convierte la interfaz de un objeto, de forma que otro objeto pueda comprenderla.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Solución</h4>
+              <p>
+                Crear un adaptador: un objeto especial que convierte la interfaz
+                de un objeto, de forma que otro objeto pueda comprenderla.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Analogía del mundo real</h4>
-        <p>Cuando viajas de Europa a Estados Unidos, los enchufes son diferentes y un enchufe español no sirve. El problema se resuelve con un adaptador que incluye el enchufe americano y el europeo.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Analogía del mundo real</h4>
+              <p>
+                Cuando viajas de Europa a Estados Unidos, los enchufes son
+                diferentes y un enchufe español no sirve. El problema se
+                resuelve con un adaptador que incluye el enchufe americano y el
+                europeo.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Aplicabilidad</h4>
-        <div class="applicability">
-          <p>Utiliza la clase adaptadora cuando quieras usar una clase existente, pero su interfaz no sea compatible con el resto del código. También cuando quieras reutilizar varias subclases existentes que carezcan de alguna funcionalidad común que no pueda añadirse a la superclase.</p>
+            <div class="pattern-section">
+              <h4>Aplicabilidad</h4>
+              <div class="applicability">
+                <p>
+                  Utiliza la clase adaptadora cuando quieras usar una clase
+                  existente, pero su interfaz no sea compatible con el resto del
+                  código. También cuando quieras reutilizar varias subclases
+                  existentes que carezcan de alguna funcionalidad común que no
+                  pueda añadirse a la superclase.
+                </p>
+              </div>
+            </div>
+
+            <div class="practice">
+              <h4>Práctica guiada del curso (WhatsApp)</h4>
+              <ul>
+                <li>
+                  <code>Messenger</code>: interfaz común con
+                  <code>sendMessage(String msg)</code>.
+                </li>
+                <li>
+                  <code>EmailSender</code> y <code>SMSSender</code>: implementan
+                  <code>Messenger</code>.
+                </li>
+                <li>
+                  <code>WhatsAppAPI</code>: externa, con
+                  <code>sendWhatsApp(String phoneNumber, String text)</code>.
+                </li>
+                <li>
+                  <code>WhatsAppAdapter</code>: adapta
+                  <code>WhatsAppAPI</code> a <code>Messenger</code>, recibe
+                  <code>phoneNumber</code> por constructor.
+                </li>
+                <li>
+                  <code>Main</code>: referencias de tipo
+                  <code>Messenger</code> y llamadas a
+                  <code>sendMessage</code> sobre cada una.
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso (WhatsApp)</h4>
-        <ul>
-          <li><code>Messenger</code>: interfaz común con <code>sendMessage(String msg)</code>.</li>
-          <li><code>EmailSender</code> y <code>SMSSender</code>: implementan <code>Messenger</code>.</li>
-          <li><code>WhatsAppAPI</code>: externa, con <code>sendWhatsApp(String phoneNumber, String text)</code>.</li>
-          <li><code>WhatsAppAdapter</code>: adapta <code>WhatsAppAPI</code> a <code>Messenger</code>, recibe <code>phoneNumber</code> por constructor.</li>
-          <li><code>Main</code>: referencias de tipo <code>Messenger</code> y llamadas a <code>sendMessage</code> sobre cada una.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+        <!-- ===== FACADE ===== -->
+        <div class="pattern estr">
+          <div class="pattern-header">
+            <h3>Facade <span class="badge badge-estr">Estructural</span></h3>
+            <p class="definition">
+              Proporciona una <em>interfaz unificada</em> para un conjunto de
+              interfaces de un sistema, escondiendo su complejidad.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Participantes</h4>
+              <div class="participants">
+                <div class="participant">
+                  <div class="name">Facade</div>
+                  <div class="role">
+                    Sabe quiénes son las clases ante una petición y delega las
+                    peticiones a los objetos apropiados.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Subsistema</div>
+                  <div class="role">
+                    Implementa la funcionalidad del subsistema; realiza las
+                    labores encomendadas por el Facade.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Cliente</div>
+                  <div class="role">
+                    Habla solo con el Facade. No conoce los subsistemas.
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <!-- ===== FACADE ===== -->
-  <div class="pattern estr">
-    <div class="pattern-header">
-      <h3>Facade <span class="badge badge-estr">Estructural</span></h3>
-      <p class="definition">Proporciona una <em>interfaz unificada</em> para un conjunto de interfaces de un sistema, escondiendo su complejidad.</p>
-    </div>
-    <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Analogía del mundo real</h4>
+              <p>
+                Cuando llamas a una tienda para hacer un pedido, el operador es
+                tu fachada a todos los servicios y departamentos. Te da una
+                sencilla interfaz de voz al sistema de pedidos, pasarelas de
+                pago y servicios de entrega.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Participantes</h4>
-        <div class="participants">
-          <div class="participant"><div class="name">Facade</div><div class="role">Sabe quiénes son las clases ante una petición y delega las peticiones a los objetos apropiados.</div></div>
-          <div class="participant"><div class="name">Subsistema</div><div class="role">Implementa la funcionalidad del subsistema; realiza las labores encomendadas por el Facade.</div></div>
-          <div class="participant"><div class="name">Cliente</div><div class="role">Habla solo con el Facade. No conoce los subsistemas.</div></div>
-        </div>
-      </div>
-
-      <div class="pattern-section">
-        <h4>Analogía del mundo real</h4>
-        <p>Cuando llamas a una tienda para hacer un pedido, el operador es tu fachada a todos los servicios y departamentos. Te da una sencilla interfaz de voz al sistema de pedidos, pasarelas de pago y servicios de entrega.</p>
-      </div>
-
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="c">// Subsistemas (cada uno con su responsabilidad)</span>
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="c">// Subsistemas (cada uno con su responsabilidad)</span>
 <span class="k">public class</span> <span class="t">CPU</span> {
     <span class="k">public void</span> <span class="m">freeze</span>()  { <span class="t">System</span>.out.<span class="m">println</span>(<span class="s">"CPU: freeze"</span>); }
     <span class="k">public void</span> <span class="m">jump</span>()    { <span class="t">System</span>.out.<span class="m">println</span>(<span class="s">"CPU: jump"</span>); }
@@ -722,56 +1706,118 @@
         <span class="t">System</span>.out.<span class="m">println</span>(<span class="s">"La computadora inició"</span>);
     }
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso (Restaurante)</h4>
-        <ul>
-          <li><code>RestaurantFacade</code> con método <code>realizarPedido(String cliente, String platillo)</code>.</li>
-          <li>Subsistemas:
-            <ul>
-              <li><code>MesaService.verificarMesaDisponible()</code></li>
-              <li><code>CocinaService.registrarOrden(String platillo)</code></li>
-              <li><code>FacturaService.generarFactura(String cliente, String platillo)</code></li>
-              <li><code>NotificacionService.enviarNotificacion(String cliente)</code></li>
-            </ul>
-          </li>
-          <li>El <code>Main</code> solo habla con la fachada, no con los subsistemas.</li>
-        </ul>
-        <p style="margin-top:10px;color:var(--text-mute);font-size:12px"><em>Ejercicio extra:</em> <code>ComputerFacade</code> con <code>CPU</code>, <code>HardDrive</code> y <code>Memory</code>, método <code>start()</code> que orquesta todo.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================== -->
-<!-- ===== COMPORTAMIENTO ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="behavioral">
-  <h2><em>Patrones de</em> Comportamiento</h2>
-  <p class="lead">Comunicación efectiva y asignación de responsabilidades entre objetos.</p>
-
-  <!-- ===== OBSERVER ===== -->
-  <div class="pattern comp">
-    <div class="pattern-header">
-      <h3>Observer <span class="badge badge-comp">Comportamiento</span></h3>
-      <p class="definition">Define una dependencia <em>uno-a-muchos</em> entre objetos, de forma que cuando un objeto cambia de estado se notifica y actualiza automáticamente a todos los objetos que dependen de él.</p>
-    </div>
-    <div class="pattern-body">
-
-      <div class="pattern-section">
-        <h4>Participantes</h4>
-        <div class="participants">
-          <div class="participant"><div class="name">Observer (Subscriber)</div><div class="role">Interfaz con el método para actualizar los objetos que deben ser notificados ante cambios del sujeto.</div></div>
-          <div class="participant"><div class="name">Subject (Publisher)</div><div class="role">Interfaz con métodos para agregar, eliminar y notificar observadores cuando el estado cambie.</div></div>
-          <div class="participant"><div class="name">ObservadorConcreto</div><div class="role">Mantiene una referencia al SujetoConcreto. Guarda un estado consistente con el del sujeto e implementa la interfaz de actualización.</div></div>
-          <div class="participant"><div class="name">SujetoConcreto</div><div class="role">Almacena el estado de interés, implementa Sujeto, contiene la lista de observadores y un método que indica el cambio de estado.</div></div>
+            <div class="practice">
+              <h4>Práctica guiada del curso (Restaurante)</h4>
+              <ul>
+                <li>
+                  <code>RestaurantFacade</code> con método
+                  <code>realizarPedido(String cliente, String platillo)</code>.
+                </li>
+                <li>
+                  Subsistemas:
+                  <ul>
+                    <li><code>MesaService.verificarMesaDisponible()</code></li>
+                    <li>
+                      <code>CocinaService.registrarOrden(String platillo)</code>
+                    </li>
+                    <li>
+                      <code
+                        >FacturaService.generarFactura(String cliente, String
+                        platillo)</code
+                      >
+                    </li>
+                    <li>
+                      <code
+                        >NotificacionService.enviarNotificacion(String
+                        cliente)</code
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  El <code>Main</code> solo habla con la fachada, no con los
+                  subsistemas.
+                </li>
+              </ul>
+              <p
+                style="
+                  margin-top: 10px;
+                  color: var(--text-mute);
+                  font-size: 12px;
+                "
+              >
+                <em>Ejercicio extra:</em> <code>ComputerFacade</code> con
+                <code>CPU</code>, <code>HardDrive</code> y <code>Memory</code>,
+                método <code>start()</code> que orquesta todo.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="pattern-section">
-        <h4>Sintaxis</h4>
-<pre><code><span class="c">// Observer</span>
+      <!-- ============================================== -->
+      <!-- ===== COMPORTAMIENTO ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="behavioral">
+        <h2><em>Patrones de</em> Comportamiento</h2>
+        <p class="lead">
+          Comunicación efectiva y asignación de responsabilidades entre objetos.
+        </p>
+
+        <!-- ===== OBSERVER ===== -->
+        <div class="pattern comp">
+          <div class="pattern-header">
+            <h3>
+              Observer <span class="badge badge-comp">Comportamiento</span>
+            </h3>
+            <p class="definition">
+              Define una dependencia <em>uno-a-muchos</em> entre objetos, de
+              forma que cuando un objeto cambia de estado se notifica y
+              actualiza automáticamente a todos los objetos que dependen de él.
+            </p>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-section">
+              <h4>Participantes</h4>
+              <div class="participants">
+                <div class="participant">
+                  <div class="name">Observer (Subscriber)</div>
+                  <div class="role">
+                    Interfaz con el método para actualizar los objetos que deben
+                    ser notificados ante cambios del sujeto.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">Subject (Publisher)</div>
+                  <div class="role">
+                    Interfaz con métodos para agregar, eliminar y notificar
+                    observadores cuando el estado cambie.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">ObservadorConcreto</div>
+                  <div class="role">
+                    Mantiene una referencia al SujetoConcreto. Guarda un estado
+                    consistente con el del sujeto e implementa la interfaz de
+                    actualización.
+                  </div>
+                </div>
+                <div class="participant">
+                  <div class="name">SujetoConcreto</div>
+                  <div class="role">
+                    Almacena el estado de interés, implementa Sujeto, contiene
+                    la lista de observadores y un método que indica el cambio de
+                    estado.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pattern-section">
+              <h4>Sintaxis</h4>
+              <pre><code><span class="c">// Observer</span>
 <span class="k">public interface</span> <span class="t">Observer</span> {
     <span class="k">void</span> <span class="m">update</span>(<span class="t">String</span> message);
 }
@@ -809,668 +1855,898 @@
         <span class="t">System</span>.out.<span class="m">println</span>(message);
     }
 }</code></pre>
-      </div>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Problema</h4>
-        <p>Tienes dos tipos de objetos: <code>Cliente</code> y <code>Tienda</code>. El cliente está muy interesado en un producto (un nuevo iPhone) que llegará pronto. Podría visitar la tienda cada día para comprobar disponibilidad, pero la mayoría de estos viajes serían en vano.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Problema</h4>
+              <p>
+                Tienes dos tipos de objetos: <code>Cliente</code> y
+                <code>Tienda</code>. El cliente está muy interesado en un
+                producto (un nuevo iPhone) que llegará pronto. Podría visitar la
+                tienda cada día para comprobar disponibilidad, pero la mayoría
+                de estos viajes serían en vano.
+              </p>
+            </div>
 
-      <div class="pattern-section">
-        <h4>Solución</h4>
-        <p>Al Sujeto se le añade: (1) un campo matriz para almacenar una lista de referencias a objetos suscriptores, y (2) varios métodos públicos que permiten añadir y eliminar suscriptores de esa lista. Cuando el estado cambia, el Sujeto notifica a todos los suscriptores.</p>
-      </div>
+            <div class="pattern-section">
+              <h4>Solución</h4>
+              <p>
+                Al Sujeto se le añade: (1) un campo matriz para almacenar una
+                lista de referencias a objetos suscriptores, y (2) varios
+                métodos públicos que permiten añadir y eliminar suscriptores de
+                esa lista. Cuando el estado cambia, el Sujeto notifica a todos
+                los suscriptores.
+              </p>
+            </div>
 
-      <div class="practice">
-        <h4>Práctica guiada del curso (Redes sociales)</h4>
-        <ul>
-          <li>En <code>Main</code>: crear los <code>Subject</code> de YouTube e Instagram.</li>
-          <li>Usar los métodos <code>addObserver</code>, <code>removeObserver</code>, <code>newReel</code> (Instagram) y <code>newVideo</code> (YouTube).</li>
-          <li>En el método <code>update</code>: usar un <code>System.out.println</code> que imprima el mensaje recibido como parámetro.</li>
-          <li>Observadores: <code>YoutubeObserver</code> e <code>InstagramObserver</code>, ambos implementan <code>Observer</code>.</li>
-        </ul>
-      </div>
+            <div class="practice">
+              <h4>Práctica guiada del curso (Redes sociales)</h4>
+              <ul>
+                <li>
+                  En <code>Main</code>: crear los <code>Subject</code> de
+                  YouTube e Instagram.
+                </li>
+                <li>
+                  Usar los métodos <code>addObserver</code>,
+                  <code>removeObserver</code>, <code>newReel</code> (Instagram)
+                  y <code>newVideo</code> (YouTube).
+                </li>
+                <li>
+                  En el método <code>update</code>: usar un
+                  <code>System.out.println</code> que imprima el mensaje
+                  recibido como parámetro.
+                </li>
+                <li>
+                  Observadores: <code>YoutubeObserver</code> e
+                  <code>InstagramObserver</code>, ambos implementan
+                  <code>Observer</code>.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ===== CATÁLOGO GoF ===== -->
+      <!-- ============================================== -->
+
+        <h3 style="margin-top: 36px; margin-bottom: 14px">
+          <span class="badge badge-crea">Creacionales</span>
+        </h3>
+        <div class="catalog">
+          <div class="catalog-item crea">
+            <div class="name">Abstract Factory</div>
+            <div class="desc">
+              Proporciona una interfaz para crear familias de objetos
+              relacionados o dependientes sin especificar sus clases concretas.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+          <div class="catalog-item crea">
+            <div class="name">Factory Method</div>
+            <div class="desc">
+              Define una interfaz para crear un objeto, pero deja que las
+              subclases decidan qué clase instanciar. Factory Method permite a
+              una clase diferir la instanciación a las subclases.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+          <div class="catalog-item crea">
+            <div class="name">Singleton</div>
+            <div class="desc">
+              Asegura que una clase tenga una única instancia y proporciona un
+              punto de acceso global a ella.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 36px; margin-bottom: 14px">
+          <span class="badge badge-estr">Estructurales</span>
+        </h3>
+        <div class="catalog">
+          <div class="catalog-item estr">
+            <div class="name">Adapter</div>
+            <div class="desc">
+              Convierte la interfaz de una clase en otra interfaz que los
+              clientes esperan. Permite que clases con interfaces incompatibles
+              trabajen juntas.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+          <div class="catalog-item estr">
+            <div class="name">Facade</div>
+            <div class="desc">
+              Proporciona una interfaz unificada para un conjunto de interfaces
+              de un subsistema. Define una interfaz de nivel superior que hace
+              el subsistema más fácil de usar.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 36px; margin-bottom: 14px">
+          <span class="badge badge-comp">Comportamiento</span>
+        </h3>
+        <div class="catalog">
+          <div class="catalog-item comp">
+            <div class="name">Observer</div>
+            <div class="desc">
+              Define una dependencia uno-a-muchos entre objetos de manera que
+              cuando un objeto cambia de estado, todos sus dependientes son
+              notificados y actualizados automáticamente.
+            </div>
+            <div class="seen">[VISTO EN CLASE]</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ===== FLASHCARDS ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="flashcards">
+        <h2><em>Flashcards</em></h2>
+        <p class="lead">
+          Tarjetas de repaso. Toca para voltear. Filtra por categoría para
+          enfocarte.
+        </p>
+
+        <div class="deck-controls">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="crea">Creacionales</button>
+          <button class="filter-btn" data-filter="estr">Estructurales</button>
+          <button class="filter-btn" data-filter="comp">Comportamiento</button>
+          <button class="filter-btn" data-filter="concept">Conceptos</button>
+          <span class="counter" id="card-counter">1 / 20</span>
+        </div>
+
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard">
+            <!-- contenido dinámico -->
+          </div>
+        </div>
+
+        <div class="deck-nav">
+          <button class="nav-btn" id="prev-card">← Anterior</button>
+          <button class="nav-btn" id="flip-card">Voltear</button>
+          <button class="nav-btn" id="next-card">Siguiente →</button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ===== QUIZ ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="quiz">
+        <h2><em>Quiz</em> de práctica</h2>
+        <p class="lead">
+          15 preguntas mezclando teoría y código. Toca una opción para validar y
+          ver la explicación.
+        </p>
+
+        <div id="quiz-container"></div>
+
+        <div class="center">
+          <button class="quiz-btn" id="reset-quiz">Reiniciar quiz</button>
+        </div>
+
+        <div class="quiz-score" id="quiz-score">
+          <h3>Puntaje final</h3>
+          <div class="score-num" id="score-num">0 / 0</div>
+          <p id="score-message"></p>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ===== CHEATSHEET ===== -->
+      <!-- ============================================== -->
+      <section class="tab-content" id="cheat">
+        <h2><em>Cheatsheet</em> — repaso rápido</h2>
+        <p class="lead">
+          Lo esencial de cada patrón, condensado para el día previo al examen.
+        </p>
+
+        <div class="cheat-section">
+          <h3><span class="badge badge-crea">Creacionales</span></h3>
+          <div class="cheat-grid">
+            <div class="cheat-box">
+              <h4>Singleton</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> una única instancia + acceso
+                  global.
+                </li>
+                <li>
+                  <strong>Receta:</strong> atributo <code>static</code> privado
+                  + constructor <code>private</code> +
+                  <code>getInstance()</code> público estático.
+                </li>
+                <li>
+                  <strong>Check:</strong>
+                  <code>if (instance == null) instance = new ...</code>
+                </li>
+                <li>
+                  <strong>Casos:</strong> config global, conexión DB, logger.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Factory Method</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> delegar la creación de un objeto a
+                  subclases.
+                </li>
+                <li>
+                  <strong>Roles:</strong> Producto (interfaz), ProductoConcreto,
+                  Creador (abstracto), CreadorConcreto.
+                </li>
+                <li>
+                  <strong>Sustituye:</strong> el operador <code>new</code> por
+                  un método de fábrica.
+                </li>
+                <li>
+                  <strong>Usar cuando:</strong> no conoces de antemano los tipos
+                  exactos a instanciar.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Abstract Factory</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> crear <strong>familias</strong> de
+                  objetos relacionados compatibles entre sí.
+                </li>
+                <li>
+                  <strong>Roles:</strong> FábricaAbstracta + FábricasConcretas +
+                  ProductosAbstractos + ProductosConcretos + Cliente.
+                </li>
+                <li>
+                  <strong>Garantiza:</strong> coherencia (todos modernos, todos
+                  premium...).
+                </li>
+                <li>
+                  <strong>vs Factory Method:</strong> Abstract Factory crea
+                  <em>varios</em> productos; Factory Method crea
+                  <em>uno solo</em>.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cheat-section">
+          <h3><span class="badge badge-estr">Estructurales</span></h3>
+          <div class="cheat-grid">
+            <div class="cheat-box">
+              <h4>Adapter</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> hacer que dos interfaces
+                  incompatibles trabajen juntas.
+                </li>
+                <li>
+                  <strong>Roles:</strong> Cliente, Objetivo (interfaz),
+                  Adaptable (la "vieja"), Adaptador.
+                </li>
+                <li>
+                  <strong>Regla clave:</strong> no se puede modificar la clase
+                  Adaptable.
+                </li>
+                <li>
+                  <strong>Receta:</strong> el Adaptador <em>implementa</em> la
+                  interfaz Objetivo y <em>envuelve</em> al Adaptable.
+                </li>
+                <li>
+                  <strong>Analogía:</strong> enchufe europeo ↔ enchufe
+                  americano.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Facade</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> interfaz unificada y simple para
+                  un subsistema complejo.
+                </li>
+                <li><strong>Roles:</strong> Facade + Subsistemas + Cliente.</li>
+                <li>
+                  <strong>Receta:</strong> el Facade tiene
+                  <em>composición</em> de los subsistemas y orquesta sus
+                  llamadas en métodos simples.
+                </li>
+                <li>
+                  <strong>Analogía:</strong> el operador de la tienda
+                  telefónica.
+                </li>
+                <li>
+                  <strong>Cliente:</strong> solo habla con la fachada, no con
+                  los subsistemas.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cheat-section">
+          <h3><span class="badge badge-comp">Comportamiento</span></h3>
+          <div class="cheat-grid">
+            <div class="cheat-box">
+              <h4>Observer</h4>
+              <ul>
+                <li>
+                  <strong>Propósito:</strong> uno-a-muchos. Cuando el sujeto
+                  cambia, todos los observadores se enteran.
+                </li>
+                <li>
+                  <strong>Roles:</strong> Subject/Publisher + ConcreteSubject +
+                  Observer/Subscriber + ConcreteObserver.
+                </li>
+                <li>
+                  <strong>Métodos del Subject:</strong>
+                  <code>addObserver</code>, <code>removeObserver</code>,
+                  <code>notifyObservers</code>.
+                </li>
+                <li>
+                  <strong>Método del Observer:</strong>
+                  <code>update(message)</code>.
+                </li>
+                <li>
+                  <strong>Receta:</strong> el sujeto tiene
+                  <code>List&lt;Observer&gt;</code> y al cambiar de estado
+                  recorre la lista llamando a <code>update</code>.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Mnemónicos</h4>
+              <ul>
+                <li><strong>Creacionales</strong> = "¿cómo creo objetos?"</li>
+                <li>
+                  <strong>Estructurales</strong> = "¿cómo conecto/agrupo
+                  objetos?"
+                </li>
+                <li>
+                  <strong>Comportamiento</strong> = "¿cómo se comunican los
+                  objetos?"
+                </li>
+                <li><strong>Singleton:</strong> uno y solo uno.</li>
+                <li>
+                  <strong>Factory:</strong> alguien más hace el
+                  <code>new</code>.
+                </li>
+                <li>
+                  <strong>Adapter:</strong> traductor entre dos interfaces.
+                </li>
+                <li><strong>Facade:</strong> recepcionista del subsistema.</li>
+                <li><strong>Observer:</strong> suscripción y notificación.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Errores comunes que evitar</h3>
+          <div class="cheat-grid">
+            <div class="cheat-box">
+              <h4>Singleton</h4>
+              <ul>
+                <li>
+                  Olvidar declarar el constructor como
+                  <code>private</code> (rompe el patrón).
+                </li>
+                <li>
+                  Olvidar el <code>static</code> en el atributo
+                  <code>instance</code>.
+                </li>
+                <li>
+                  No verificar <code>if (instance == null)</code> dentro de
+                  <code>getInstance()</code>.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Factory Method</h4>
+              <ul>
+                <li>
+                  Que la fábrica devuelva una clase concreta en lugar de la
+                  interfaz Producto.
+                </li>
+                <li>
+                  Hacer <code>new</code> directo en el cliente en vez de pasar
+                  por la fábrica.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Adapter</h4>
+              <ul>
+                <li>
+                  Modificar la clase "vieja" en vez de crear el adaptador (eso
+                  ya no es Adapter).
+                </li>
+                <li>
+                  El adaptador <strong>implementa</strong> la interfaz objetivo,
+                  <strong>no la extiende</strong>.
+                </li>
+              </ul>
+            </div>
+            <div class="cheat-box">
+              <h4>Observer</h4>
+              <ul>
+                <li>
+                  Que el Subject conozca tipos concretos de Observers en vez de
+                  la interfaz.
+                </li>
+                <li>
+                  Olvidar llamar a <code>notifyObservers()</code> después de
+                  cambiar el estado.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        IF0006 · Desarrollo de Software III · I Ciclo 2026 · Keylor Barrantes
+        Gómez · C5D024
+      </footer>
     </div>
-  </div>
-</section>
 
-<!-- ============================================== -->
-<!-- ===== CATÁLOGO GoF ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="catalog">
-  <h2>El Catálogo de <em>Patrones de Diseño</em></h2>
-  <p class="lead">Los 23 patrones clásicos del libro de la Banda de los Cuatro (GoF), tal como aparecen en el catálogo del PDF del curso. Los marcados con <span style="color:var(--amber);font-family:var(--mono);font-size:11px">[VISTO]</span> se trabajaron en clase con práctica guiada.</p>
+    <!-- ====================================================== -->
+    <!-- ===== SCRIPTS ===== -->
+    <!-- ====================================================== -->
+    <script>
+      // === TABS ===
+      document.querySelectorAll(".tab").forEach((t) => {
+        t.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((x) => x.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((x) => x.classList.remove("active"));
+          t.classList.add("active");
+          document.getElementById(t.dataset.tab).classList.add("active");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
 
-  <h3 style="margin-top:36px; margin-bottom:14px"><span class="badge badge-crea">Creacionales</span></h3>
-  <div class="catalog">
-    <div class="catalog-item crea">
-      <div class="name">Abstract Factory</div>
-      <div class="desc">Proporciona una interfaz para crear familias de objetos relacionados o dependientes sin especificar sus clases concretas.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-    <div class="catalog-item crea">
-      <div class="name">Builder</div>
-      <div class="desc">Separa la construcción de un objeto complejo de su representación, de modo que el mismo proceso de construcción puede crear diferentes representaciones.</div>
-    </div>
-    <div class="catalog-item crea">
-      <div class="name">Factory Method</div>
-      <div class="desc">Define una interfaz para crear un objeto, pero deja que las subclases decidan qué clase instanciar. Factory Method permite a una clase diferir la instanciación a las subclases.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-    <div class="catalog-item crea">
-      <div class="name">Prototype</div>
-      <div class="desc">Especifica los tipos de objetos a crear usando una instancia prototípica, y crea nuevos objetos copiando este prototipo.</div>
-    </div>
-    <div class="catalog-item crea">
-      <div class="name">Singleton</div>
-      <div class="desc">Asegura que una clase tenga una única instancia y proporciona un punto de acceso global a ella.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-  </div>
+      // === FLASHCARDS ===
+      const allCards = [
+        // Conceptos generales
+        {
+          cat: "concept",
+          q: "¿Qué es un patrón de diseño?",
+          a: 'Una solución o técnica típica a un problema común en el diseño de software. No es código específico, sino un concepto general — un "plano" que se personaliza para resolver problemas recurrentes.',
+        },
+        {
+          cat: "concept",
+          q: "¿Cuáles son las tres clasificaciones por propósito?",
+          a: "<strong>Creacionales</strong> (creación de objetos), <strong>Estructurales</strong> (ensamblaje de objetos en estructuras) y <strong>de Comportamiento</strong> (comunicación y responsabilidades entre objetos).",
+        },
+        {
+          cat: "concept",
+          q: "¿Qué problema resuelven los patrones Creacionales?",
+          a: "Cómo crear objetos de manera eficiente, ocultar la lógica de instanciación y reducir el acoplamiento.",
+        },
+        {
+          cat: "concept",
+          q: "¿Qué problema resuelven los patrones Estructurales?",
+          a: "Cómo ensamblar objetos y clases en estructuras más grandes manteniéndolas flexibles y eficientes. Garantizan que cuando una parte cambia, no es necesario cambiar toda la estructura.",
+        },
+        {
+          cat: "concept",
+          q: "¿Qué problema resuelven los patrones de Comportamiento?",
+          a: "La comunicación efectiva y la asignación de responsabilidades entre objetos.",
+        },
 
-  <h3 style="margin-top:36px; margin-bottom:14px"><span class="badge badge-estr">Estructurales</span></h3>
-  <div class="catalog">
-    <div class="catalog-item estr">
-      <div class="name">Adapter</div>
-      <div class="desc">Convierte la interfaz de una clase en otra interfaz que los clientes esperan. Permite que clases con interfaces incompatibles trabajen juntas.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Bridge</div>
-      <div class="desc">Desacopla una abstracción de su implementación para que las dos puedan variar independientemente.</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Composite</div>
-      <div class="desc">Compone objetos en estructuras de árbol para representar jerarquías parte-todo. Permite a los clientes tratar objetos individuales y composiciones de manera uniforme.</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Decorator</div>
-      <div class="desc">Añade responsabilidades adicionales a un objeto dinámicamente. Los decoradores son una alternativa flexible a la herencia para extender funcionalidad.</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Facade</div>
-      <div class="desc">Proporciona una interfaz unificada para un conjunto de interfaces de un subsistema. Define una interfaz de nivel superior que hace el subsistema más fácil de usar.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Flyweight</div>
-      <div class="desc">Usa compartición para soportar grandes cantidades de objetos de grano fino de forma eficiente.</div>
-    </div>
-    <div class="catalog-item estr">
-      <div class="name">Proxy</div>
-      <div class="desc">Proporciona un sustituto o marcador de posición para otro objeto para controlar el acceso a él.</div>
-    </div>
-  </div>
+        // Singleton
+        {
+          cat: "crea",
+          q: "¿Qué garantiza el patrón <em>Singleton</em>?",
+          a: "Que una clase tenga una única instancia, y proporciona un punto de acceso global a esa instancia.",
+        },
+        {
+          cat: "crea",
+          q: "Singleton — los 3 pasos de implementación",
+          a: "1) Atributo <code>static</code> privado para guardar la instancia.<br>2) Constructor <code>private</code>.<br>3) Método <code>static</code> público <code>getInstance()</code> que verifica si ya existe; si no, la crea.",
+        },
+        {
+          cat: "crea",
+          q: "¿Cuándo usar Singleton?",
+          a: "Cuando una clase debe tener una sola instancia disponible para todos los clientes. Ejemplos: configuración global, conexión a base de datos, logger.",
+        },
 
-  <h3 style="margin-top:36px; margin-bottom:14px"><span class="badge badge-comp">Comportamiento</span></h3>
-  <div class="catalog">
-    <div class="catalog-item comp">
-      <div class="name">Chain of Responsibility</div>
-      <div class="desc">Evita acoplar el emisor de una petición con su receptor dando a más de un objeto la oportunidad de manejar la petición. Encadena los objetos receptores y pasa la petición a lo largo de la cadena hasta que un objeto la maneje.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Command</div>
-      <div class="desc">Encapsula una petición como un objeto, permitiendo parametrizar clientes con diferentes peticiones, encolar o registrar peticiones y soportar operaciones de deshacer.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Interpreter</div>
-      <div class="desc">Dado un lenguaje, define una representación para su gramática junto con un intérprete que usa la representación para interpretar oraciones del lenguaje.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Iterator</div>
-      <div class="desc">Proporciona una forma de acceder a los elementos de un objeto agregado secuencialmente sin exponer su representación subyacente.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Mediator</div>
-      <div class="desc">Define un objeto que encapsula cómo un conjunto de objetos interactúa. Promueve el acoplamiento débil al evitar que los objetos se refieran entre sí explícitamente.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Memento</div>
-      <div class="desc">Sin violar la encapsulación, captura y externaliza el estado interno de un objeto para que pueda ser restaurado a ese estado más adelante.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Observer</div>
-      <div class="desc">Define una dependencia uno-a-muchos entre objetos de manera que cuando un objeto cambia de estado, todos sus dependientes son notificados y actualizados automáticamente.</div>
-      <div class="seen">[VISTO EN CLASE]</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">State</div>
-      <div class="desc">Permite a un objeto alterar su comportamiento cuando su estado interno cambia. El objeto parecerá cambiar su clase.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Strategy</div>
-      <div class="desc">Define una familia de algoritmos, encapsula cada uno y los hace intercambiables. Strategy permite que el algoritmo varíe independientemente de los clientes que lo usan.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Template Method</div>
-      <div class="desc">Define el esqueleto de un algoritmo en una operación, difiriendo algunos pasos a las subclases. Permite a las subclases redefinir ciertos pasos sin cambiar la estructura del algoritmo.</div>
-    </div>
-    <div class="catalog-item comp">
-      <div class="name">Visitor</div>
-      <div class="desc">Representa una operación a realizar sobre los elementos de una estructura de objetos. Permite definir una nueva operación sin cambiar las clases de los elementos sobre los que opera.</div>
-    </div>
-  </div>
-</section>
+        // Factory Method
+        {
+          cat: "crea",
+          q: "¿Qué hace el <em>Factory Method</em>?",
+          a: "Proporciona una interfaz para crear objetos en una superclase, pero permite que las subclases decidan qué tipo de objeto instanciar.",
+        },
+        {
+          cat: "crea",
+          q: "Participantes de Factory Method",
+          a: "<strong>Producto</strong> (interfaz), <strong>ProductoConcreto</strong> (implementa Producto), <strong>Creador</strong> (clase abstracta con <code>crearProducto()</code> abstracto) y <strong>CreadorConcreto</strong> (sobrescribe el método de fábrica para devolver un ProductoConcreto).",
+        },
+        {
+          cat: "crea",
+          q: "¿Cuándo usar Factory Method?",
+          a: "Cuando no se conocen de antemano las dependencias ni los tipos exactos de los objetos con los que el código debe funcionar.",
+        },
 
-<!-- ============================================== -->
-<!-- ===== FLASHCARDS ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="flashcards">
-  <h2><em>Flashcards</em></h2>
-  <p class="lead">Tarjetas de repaso. Toca para voltear. Filtra por categoría para enfocarte.</p>
+        // Abstract Factory
+        {
+          cat: "crea",
+          q: "¿Qué hace el <em>Abstract Factory</em>?",
+          a: "Crea familias de objetos relacionados que deben ser compatibles entre sí, sin especificar sus clases concretas.",
+        },
+        {
+          cat: "crea",
+          q: "Abstract Factory vs Factory Method",
+          a: "<strong>Abstract Factory</strong> define una interfaz para crear <strong>múltiples productos relacionados</strong>, garantizando compatibilidad (todos premium, todos modernos...). <strong>Factory Method</strong> delega la creación de <strong>un solo producto</strong> a subclases.",
+        },
 
-  <div class="deck-controls">
-    <button class="filter-btn active" data-filter="all">Todas</button>
-    <button class="filter-btn" data-filter="crea">Creacionales</button>
-    <button class="filter-btn" data-filter="estr">Estructurales</button>
-    <button class="filter-btn" data-filter="comp">Comportamiento</button>
-    <button class="filter-btn" data-filter="concept">Conceptos</button>
-    <span class="counter" id="card-counter">1 / 20</span>
-  </div>
+        // Adapter
+        {
+          cat: "estr",
+          q: "¿Qué hace el patrón <em>Adapter</em>?",
+          a: "Convierte la interfaz de una clase en otra que esperan los clientes. Permite cooperar a clases con interfaces incompatibles <strong>sin modificar la clase original</strong>.",
+        },
+        {
+          cat: "estr",
+          q: "Participantes de Adapter",
+          a: '<strong>Cliente</strong>, <strong>Objetivo-Cliente (interfaz)</strong>, <strong>Adaptable</strong> (la clase "vieja" que no se puede cambiar) y <strong>Adaptador</strong> (implementa la interfaz objetivo y envuelve al Adaptable).',
+        },
+        {
+          cat: "estr",
+          q: "Analogía del Adapter",
+          a: "Los enchufes europeos no encajan en los estadounidenses; se necesita un adaptador que incluya ambos formatos para hacerlos cooperar.",
+        },
 
-  <div class="flashcard-container">
-    <div class="flashcard" id="flashcard">
-      <!-- contenido dinámico -->
-    </div>
-  </div>
+        // Facade
+        {
+          cat: "estr",
+          q: "¿Qué hace el patrón <em>Facade</em>?",
+          a: "Proporciona una interfaz unificada y simple para un conjunto de interfaces de un sistema, ocultando su complejidad al cliente.",
+        },
+        {
+          cat: "estr",
+          q: "Participantes de Facade",
+          a: "<strong>Facade</strong> (conoce a los subsistemas y delega), <strong>Subsistema</strong> (clases que hacen el trabajo real) y <strong>Cliente</strong> (solo habla con el Facade).",
+        },
+        {
+          cat: "estr",
+          q: "Analogía del Facade",
+          a: "El operador de una tienda telefónica: una sola interfaz de voz que conecta con sistemas de pedidos, pagos y entregas.",
+        },
 
-  <div class="deck-nav">
-    <button class="nav-btn" id="prev-card">← Anterior</button>
-    <button class="nav-btn" id="flip-card">Voltear</button>
-    <button class="nav-btn" id="next-card">Siguiente →</button>
-  </div>
-</section>
+        // Observer
+        {
+          cat: "comp",
+          q: "¿Qué define el patrón <em>Observer</em>?",
+          a: "Una dependencia uno-a-muchos entre objetos: cuando un objeto cambia de estado, se notifican y actualizan automáticamente todos los objetos que dependen de él.",
+        },
+        {
+          cat: "comp",
+          q: "Participantes de Observer",
+          a: "<strong>Subject/Publisher</strong> (interfaz con add/remove/notify), <strong>SujetoConcreto</strong> (guarda el estado y la lista de observadores), <strong>Observer/Subscriber</strong> (interfaz con <code>update</code>) y <strong>ObservadorConcreto</strong> (implementa update).",
+        },
+        {
+          cat: "comp",
+          q: "Métodos típicos del Subject en Observer",
+          a: "<code>addObserver(Observer o)</code>, <code>removeObserver(Observer o)</code>, <code>notifyObservers()</code>, además de los métodos que cambian el estado (como <code>newVideo</code> o <code>newReel</code>) y que internamente llaman a <code>notifyObservers()</code>.",
+        },
+      ];
 
-<!-- ============================================== -->
-<!-- ===== QUIZ ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="quiz">
-  <h2><em>Quiz</em> de práctica</h2>
-  <p class="lead">15 preguntas mezclando teoría y código. Toca una opción para validar y ver la explicación.</p>
+      let filteredCards = [...allCards];
+      let currentCard = 0;
+      let isFlipped = false;
 
-  <div id="quiz-container"></div>
-
-  <div class="center">
-    <button class="quiz-btn" id="reset-quiz">Reiniciar quiz</button>
-  </div>
-
-  <div class="quiz-score" id="quiz-score">
-    <h3>Puntaje final</h3>
-    <div class="score-num" id="score-num">0 / 0</div>
-    <p id="score-message"></p>
-  </div>
-</section>
-
-<!-- ============================================== -->
-<!-- ===== CHEATSHEET ===== -->
-<!-- ============================================== -->
-<section class="tab-content" id="cheat">
-  <h2><em>Cheatsheet</em> — repaso rápido</h2>
-  <p class="lead">Lo esencial de cada patrón, condensado para el día previo al examen.</p>
-
-  <div class="cheat-section">
-    <h3><span class="badge badge-crea">Creacionales</span></h3>
-    <div class="cheat-grid">
-      <div class="cheat-box">
-        <h4>Singleton</h4>
-        <ul>
-          <li><strong>Propósito:</strong> una única instancia + acceso global.</li>
-          <li><strong>Receta:</strong> atributo <code>static</code> privado + constructor <code>private</code> + <code>getInstance()</code> público estático.</li>
-          <li><strong>Check:</strong> <code>if (instance == null) instance = new ...</code></li>
-          <li><strong>Casos:</strong> config global, conexión DB, logger.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Factory Method</h4>
-        <ul>
-          <li><strong>Propósito:</strong> delegar la creación de un objeto a subclases.</li>
-          <li><strong>Roles:</strong> Producto (interfaz), ProductoConcreto, Creador (abstracto), CreadorConcreto.</li>
-          <li><strong>Sustituye:</strong> el operador <code>new</code> por un método de fábrica.</li>
-          <li><strong>Usar cuando:</strong> no conoces de antemano los tipos exactos a instanciar.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Abstract Factory</h4>
-        <ul>
-          <li><strong>Propósito:</strong> crear <strong>familias</strong> de objetos relacionados compatibles entre sí.</li>
-          <li><strong>Roles:</strong> FábricaAbstracta + FábricasConcretas + ProductosAbstractos + ProductosConcretos + Cliente.</li>
-          <li><strong>Garantiza:</strong> coherencia (todos modernos, todos premium...).</li>
-          <li><strong>vs Factory Method:</strong> Abstract Factory crea <em>varios</em> productos; Factory Method crea <em>uno solo</em>.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="cheat-section">
-    <h3><span class="badge badge-estr">Estructurales</span></h3>
-    <div class="cheat-grid">
-      <div class="cheat-box">
-        <h4>Adapter</h4>
-        <ul>
-          <li><strong>Propósito:</strong> hacer que dos interfaces incompatibles trabajen juntas.</li>
-          <li><strong>Roles:</strong> Cliente, Objetivo (interfaz), Adaptable (la "vieja"), Adaptador.</li>
-          <li><strong>Regla clave:</strong> no se puede modificar la clase Adaptable.</li>
-          <li><strong>Receta:</strong> el Adaptador <em>implementa</em> la interfaz Objetivo y <em>envuelve</em> al Adaptable.</li>
-          <li><strong>Analogía:</strong> enchufe europeo ↔ enchufe americano.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Facade</h4>
-        <ul>
-          <li><strong>Propósito:</strong> interfaz unificada y simple para un subsistema complejo.</li>
-          <li><strong>Roles:</strong> Facade + Subsistemas + Cliente.</li>
-          <li><strong>Receta:</strong> el Facade tiene <em>composición</em> de los subsistemas y orquesta sus llamadas en métodos simples.</li>
-          <li><strong>Analogía:</strong> el operador de la tienda telefónica.</li>
-          <li><strong>Cliente:</strong> solo habla con la fachada, no con los subsistemas.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="cheat-section">
-    <h3><span class="badge badge-comp">Comportamiento</span></h3>
-    <div class="cheat-grid">
-      <div class="cheat-box">
-        <h4>Observer</h4>
-        <ul>
-          <li><strong>Propósito:</strong> uno-a-muchos. Cuando el sujeto cambia, todos los observadores se enteran.</li>
-          <li><strong>Roles:</strong> Subject/Publisher + ConcreteSubject + Observer/Subscriber + ConcreteObserver.</li>
-          <li><strong>Métodos del Subject:</strong> <code>addObserver</code>, <code>removeObserver</code>, <code>notifyObservers</code>.</li>
-          <li><strong>Método del Observer:</strong> <code>update(message)</code>.</li>
-          <li><strong>Receta:</strong> el sujeto tiene <code>List&lt;Observer&gt;</code> y al cambiar de estado recorre la lista llamando a <code>update</code>.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Mnemónicos</h4>
-        <ul>
-          <li><strong>Creacionales</strong> = "¿cómo creo objetos?"</li>
-          <li><strong>Estructurales</strong> = "¿cómo conecto/agrupo objetos?"</li>
-          <li><strong>Comportamiento</strong> = "¿cómo se comunican los objetos?"</li>
-          <li><strong>Singleton:</strong> uno y solo uno.</li>
-          <li><strong>Factory:</strong> alguien más hace el <code>new</code>.</li>
-          <li><strong>Adapter:</strong> traductor entre dos interfaces.</li>
-          <li><strong>Facade:</strong> recepcionista del subsistema.</li>
-          <li><strong>Observer:</strong> suscripción y notificación.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="cheat-section">
-    <h3>Errores comunes que evitar</h3>
-    <div class="cheat-grid">
-      <div class="cheat-box">
-        <h4>Singleton</h4>
-        <ul>
-          <li>Olvidar declarar el constructor como <code>private</code> (rompe el patrón).</li>
-          <li>Olvidar el <code>static</code> en el atributo <code>instance</code>.</li>
-          <li>No verificar <code>if (instance == null)</code> dentro de <code>getInstance()</code>.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Factory Method</h4>
-        <ul>
-          <li>Que la fábrica devuelva una clase concreta en lugar de la interfaz Producto.</li>
-          <li>Hacer <code>new</code> directo en el cliente en vez de pasar por la fábrica.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Adapter</h4>
-        <ul>
-          <li>Modificar la clase "vieja" en vez de crear el adaptador (eso ya no es Adapter).</li>
-          <li>El adaptador <strong>implementa</strong> la interfaz objetivo, <strong>no la extiende</strong>.</li>
-        </ul>
-      </div>
-      <div class="cheat-box">
-        <h4>Observer</h4>
-        <ul>
-          <li>Que el Subject conozca tipos concretos de Observers en vez de la interfaz.</li>
-          <li>Olvidar llamar a <code>notifyObservers()</code> después de cambiar el estado.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  IF0006 · Desarrollo de Software III · I Ciclo 2026 · Keylor Barrantes Gómez · C5D024
-</footer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- ===== SCRIPTS ===== -->
-<!-- ====================================================== -->
-<script>
-// === TABS ===
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.tab).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-
-// === FLASHCARDS ===
-const allCards = [
-  // Conceptos generales
-  { cat:'concept', q:'¿Qué es un patrón de diseño?',
-    a:'Una solución o técnica típica a un problema común en el diseño de software. No es código específico, sino un concepto general — un "plano" que se personaliza para resolver problemas recurrentes.' },
-  { cat:'concept', q:'¿Cuáles son las tres clasificaciones por propósito?',
-    a:'<strong>Creacionales</strong> (creación de objetos), <strong>Estructurales</strong> (ensamblaje de objetos en estructuras) y <strong>de Comportamiento</strong> (comunicación y responsabilidades entre objetos).' },
-  { cat:'concept', q:'¿Qué problema resuelven los patrones Creacionales?',
-    a:'Cómo crear objetos de manera eficiente, ocultar la lógica de instanciación y reducir el acoplamiento.' },
-  { cat:'concept', q:'¿Qué problema resuelven los patrones Estructurales?',
-    a:'Cómo ensamblar objetos y clases en estructuras más grandes manteniéndolas flexibles y eficientes. Garantizan que cuando una parte cambia, no es necesario cambiar toda la estructura.' },
-  { cat:'concept', q:'¿Qué problema resuelven los patrones de Comportamiento?',
-    a:'La comunicación efectiva y la asignación de responsabilidades entre objetos.' },
-
-  // Singleton
-  { cat:'crea', q:'¿Qué garantiza el patrón <em>Singleton</em>?',
-    a:'Que una clase tenga una única instancia, y proporciona un punto de acceso global a esa instancia.' },
-  { cat:'crea', q:'Singleton — los 3 pasos de implementación',
-    a:'1) Atributo <code>static</code> privado para guardar la instancia.<br>2) Constructor <code>private</code>.<br>3) Método <code>static</code> público <code>getInstance()</code> que verifica si ya existe; si no, la crea.' },
-  { cat:'crea', q:'¿Cuándo usar Singleton?',
-    a:'Cuando una clase debe tener una sola instancia disponible para todos los clientes. Ejemplos: configuración global, conexión a base de datos, logger.' },
-
-  // Factory Method
-  { cat:'crea', q:'¿Qué hace el <em>Factory Method</em>?',
-    a:'Proporciona una interfaz para crear objetos en una superclase, pero permite que las subclases decidan qué tipo de objeto instanciar.' },
-  { cat:'crea', q:'Participantes de Factory Method',
-    a:'<strong>Producto</strong> (interfaz), <strong>ProductoConcreto</strong> (implementa Producto), <strong>Creador</strong> (clase abstracta con <code>crearProducto()</code> abstracto) y <strong>CreadorConcreto</strong> (sobrescribe el método de fábrica para devolver un ProductoConcreto).' },
-  { cat:'crea', q:'¿Cuándo usar Factory Method?',
-    a:'Cuando no se conocen de antemano las dependencias ni los tipos exactos de los objetos con los que el código debe funcionar.' },
-
-  // Abstract Factory
-  { cat:'crea', q:'¿Qué hace el <em>Abstract Factory</em>?',
-    a:'Crea familias de objetos relacionados que deben ser compatibles entre sí, sin especificar sus clases concretas.' },
-  { cat:'crea', q:'Abstract Factory vs Factory Method',
-    a:'<strong>Abstract Factory</strong> define una interfaz para crear <strong>múltiples productos relacionados</strong>, garantizando compatibilidad (todos premium, todos modernos...). <strong>Factory Method</strong> delega la creación de <strong>un solo producto</strong> a subclases.' },
-
-  // Adapter
-  { cat:'estr', q:'¿Qué hace el patrón <em>Adapter</em>?',
-    a:'Convierte la interfaz de una clase en otra que esperan los clientes. Permite cooperar a clases con interfaces incompatibles <strong>sin modificar la clase original</strong>.' },
-  { cat:'estr', q:'Participantes de Adapter',
-    a:'<strong>Cliente</strong>, <strong>Objetivo-Cliente (interfaz)</strong>, <strong>Adaptable</strong> (la clase "vieja" que no se puede cambiar) y <strong>Adaptador</strong> (implementa la interfaz objetivo y envuelve al Adaptable).' },
-  { cat:'estr', q:'Analogía del Adapter',
-    a:'Los enchufes europeos no encajan en los estadounidenses; se necesita un adaptador que incluya ambos formatos para hacerlos cooperar.' },
-
-  // Facade
-  { cat:'estr', q:'¿Qué hace el patrón <em>Facade</em>?',
-    a:'Proporciona una interfaz unificada y simple para un conjunto de interfaces de un sistema, ocultando su complejidad al cliente.' },
-  { cat:'estr', q:'Participantes de Facade',
-    a:'<strong>Facade</strong> (conoce a los subsistemas y delega), <strong>Subsistema</strong> (clases que hacen el trabajo real) y <strong>Cliente</strong> (solo habla con el Facade).' },
-  { cat:'estr', q:'Analogía del Facade',
-    a:'El operador de una tienda telefónica: una sola interfaz de voz que conecta con sistemas de pedidos, pagos y entregas.' },
-
-  // Observer
-  { cat:'comp', q:'¿Qué define el patrón <em>Observer</em>?',
-    a:'Una dependencia uno-a-muchos entre objetos: cuando un objeto cambia de estado, se notifican y actualizan automáticamente todos los objetos que dependen de él.' },
-  { cat:'comp', q:'Participantes de Observer',
-    a:'<strong>Subject/Publisher</strong> (interfaz con add/remove/notify), <strong>SujetoConcreto</strong> (guarda el estado y la lista de observadores), <strong>Observer/Subscriber</strong> (interfaz con <code>update</code>) y <strong>ObservadorConcreto</strong> (implementa update).' },
-  { cat:'comp', q:'Métodos típicos del Subject en Observer',
-    a:'<code>addObserver(Observer o)</code>, <code>removeObserver(Observer o)</code>, <code>notifyObservers()</code>, además de los métodos que cambian el estado (como <code>newVideo</code> o <code>newReel</code>) y que internamente llaman a <code>notifyObservers()</code>.' },
-];
-
-let filteredCards = [...allCards];
-let currentCard = 0;
-let isFlipped = false;
-
-function renderCard() {
-  if (filteredCards.length === 0) return;
-  const c = filteredCards[currentCard];
-  const badgeClass = c.cat === 'crea' ? 'badge-crea' : c.cat === 'estr' ? 'badge-estr' : c.cat === 'comp' ? 'badge-comp' : 'badge-crea';
-  const badgeText = c.cat === 'crea' ? 'Creacional' : c.cat === 'estr' ? 'Estructural' : c.cat === 'comp' ? 'Comportamiento' : 'Concepto';
-  document.getElementById('flashcard').innerHTML = `
+      function renderCard() {
+        if (filteredCards.length === 0) return;
+        const c = filteredCards[currentCard];
+        const badgeClass =
+          c.cat === "crea"
+            ? "badge-crea"
+            : c.cat === "estr"
+              ? "badge-estr"
+              : c.cat === "comp"
+                ? "badge-comp"
+                : "badge-crea";
+        const badgeText =
+          c.cat === "crea"
+            ? "Creacional"
+            : c.cat === "estr"
+              ? "Estructural"
+              : c.cat === "comp"
+                ? "Comportamiento"
+                : "Concepto";
+        document.getElementById("flashcard").innerHTML = `
     <div class="flashcard-face flashcard-front">
-      <span class="num">${(currentCard+1).toString().padStart(2,'0')} / ${filteredCards.length.toString().padStart(2,'0')}</span>
+      <span class="num">${(currentCard + 1).toString().padStart(2, "0")} / ${filteredCards.length.toString().padStart(2, "0")}</span>
       <span class="badge ${badgeClass}">${badgeText}</span>
       <h3>${c.q}</h3>
       <p class="hint">Toca para ver la respuesta</p>
     </div>
     <div class="flashcard-face flashcard-back">
-      <span class="num">${(currentCard+1).toString().padStart(2,'0')} / ${filteredCards.length.toString().padStart(2,'0')}</span>
+      <span class="num">${(currentCard + 1).toString().padStart(2, "0")} / ${filteredCards.length.toString().padStart(2, "0")}</span>
       <span class="badge ${badgeClass}">${badgeText}</span>
       <div class="answer-label">Respuesta</div>
       <div class="answer">${c.a}</div>
     </div>
   `;
-  document.getElementById('card-counter').textContent = `${currentCard+1} / ${filteredCards.length}`;
-  document.getElementById('prev-card').disabled = currentCard === 0;
-  document.getElementById('next-card').disabled = currentCard === filteredCards.length - 1;
-  const card = document.getElementById('flashcard');
-  card.classList.remove('flipped');
-  isFlipped = false;
-}
+        document.getElementById("card-counter").textContent =
+          `${currentCard + 1} / ${filteredCards.length}`;
+        document.getElementById("prev-card").disabled = currentCard === 0;
+        document.getElementById("next-card").disabled =
+          currentCard === filteredCards.length - 1;
+        const card = document.getElementById("flashcard");
+        card.classList.remove("flipped");
+        isFlipped = false;
+      }
 
-document.getElementById('flashcard').addEventListener('click', () => {
-  isFlipped = !isFlipped;
-  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
-});
-document.getElementById('flip-card').addEventListener('click', (e) => {
-  e.stopPropagation();
-  isFlipped = !isFlipped;
-  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
-});
-document.getElementById('prev-card').addEventListener('click', () => {
-  if (currentCard > 0) { currentCard--; renderCard(); }
-});
-document.getElementById('next-card').addEventListener('click', () => {
-  if (currentCard < filteredCards.length - 1) { currentCard++; renderCard(); }
-});
+      document.getElementById("flashcard").addEventListener("click", () => {
+        isFlipped = !isFlipped;
+        document
+          .getElementById("flashcard")
+          .classList.toggle("flipped", isFlipped);
+      });
+      document.getElementById("flip-card").addEventListener("click", (e) => {
+        e.stopPropagation();
+        isFlipped = !isFlipped;
+        document
+          .getElementById("flashcard")
+          .classList.toggle("flipped", isFlipped);
+      });
+      document.getElementById("prev-card").addEventListener("click", () => {
+        if (currentCard > 0) {
+          currentCard--;
+          renderCard();
+        }
+      });
+      document.getElementById("next-card").addEventListener("click", () => {
+        if (currentCard < filteredCards.length - 1) {
+          currentCard++;
+          renderCard();
+        }
+      });
 
-document.querySelectorAll('.filter-btn').forEach(b => {
-  b.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    const f = b.dataset.filter;
-    filteredCards = f === 'all' ? [...allCards] : allCards.filter(c => c.cat === f);
-    currentCard = 0;
-    renderCard();
-  });
-});
+      document.querySelectorAll(".filter-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((x) => x.classList.remove("active"));
+          b.classList.add("active");
+          const f = b.dataset.filter;
+          filteredCards =
+            f === "all" ? [...allCards] : allCards.filter((c) => c.cat === f);
+          currentCard = 0;
+          renderCard();
+        });
+      });
 
-renderCard();
+      renderCard();
 
-// === QUIZ ===
-const quizQuestions = [
-  {
-    q: '¿Cuál es la <strong>diferencia clave</strong> entre Factory Method y Abstract Factory?',
-    opts: [
-      'Factory Method usa interfaces y Abstract Factory usa clases abstractas.',
-      'Factory Method crea un solo producto; Abstract Factory crea familias de productos relacionados.',
-      'Factory Method es creacional, Abstract Factory es estructural.',
-      'No hay diferencia, son sinónimos.'
-    ],
-    correct: 1,
-    exp: 'Factory Method delega la creación de un único producto a subclases. Abstract Factory crea familias de productos relacionados y compatibles entre sí (ej: todos los muebles "modernos" o todos los chocolates "premium").'
-  },
-  {
-    q: '¿Qué <strong>error</strong> rompe el patrón Singleton?',
-    opts: [
-      'Hacer el constructor <code>public</code>.',
-      'Usar <code>getInstance()</code> en vez de <code>new</code>.',
-      'Declarar el atributo <code>instance</code> como <code>static</code>.',
-      'Verificar <code>if (instance == null)</code> antes de crear.'
-    ],
-    correct: 0,
-    exp: 'Si el constructor es público, cualquier clase puede hacer <code>new</code> y crear instancias adicionales, anulando la garantía de instancia única. El constructor debe ser <code>private</code>.'
-  },
-  {
-    q: 'En el patrón <strong>Adapter</strong>, ¿qué relación tiene el Adaptador con la clase Adaptable?',
-    opts: [
-      'El Adaptador hereda de la clase Adaptable.',
-      'El Adaptador modifica la clase Adaptable.',
-      'El Adaptador envuelve a la clase Adaptable y traduce sus llamadas a la interfaz objetivo.',
-      'El Adaptador reemplaza completamente a la clase Adaptable.'
-    ],
-    correct: 2,
-    exp: 'El Adaptador implementa la interfaz Objetivo y contiene una referencia (composición) al Adaptable. Cuando recibe una llamada en el formato objetivo, la traduce al formato que el Adaptable entiende. La clase Adaptable no se modifica.'
-  },
-  {
-    q: '¿Qué patrón aplicarías para un sistema con <strong>configuración global</strong> de juego (dificultad, vidas, velocidad de enemigos) que debe ser la misma en todos los subsistemas?',
-    opts: ['Factory Method', 'Singleton', 'Observer', 'Facade'],
-    correct: 1,
-    exp: 'Singleton garantiza una única instancia accesible globalmente. Todos los subsistemas llaman <code>GameConfig.getInstance()</code> y obtienen exactamente la misma configuración, evitando inconsistencias.'
-  },
-  {
-    q: '¿Qué patrón usa una <strong>lista de suscriptores</strong> que se notifican cuando cambia el estado?',
-    opts: ['Adapter', 'Singleton', 'Observer', 'Factory Method'],
-    correct: 2,
-    exp: 'Observer define una dependencia uno-a-muchos. El Subject mantiene una lista de Observers y llama <code>update()</code> en cada uno cuando su estado cambia.'
-  },
-  {
-    q: 'Tienes una clase <code>WhatsAppAPI</code> con un método <code>sendWhatsApp(phoneNumber, text)</code> que no puedes modificar, pero el resto del sistema usa una interfaz <code>Messenger</code> con <code>sendMessage(msg)</code>. ¿Qué patrón aplicas?',
-    opts: ['Singleton', 'Adapter', 'Facade', 'Abstract Factory'],
-    correct: 1,
-    exp: 'Adapter. Creas un <code>WhatsAppAdapter</code> que implementa <code>Messenger</code> y, en <code>sendMessage</code>, llama internamente a <code>sendWhatsApp(phoneNumber, msg)</code>.'
-  },
-  {
-    q: 'En Facade, ¿quién <strong>conoce a los subsistemas</strong>?',
-    opts: [
-      'El Cliente conoce todos los subsistemas.',
-      'El Facade conoce los subsistemas; el Cliente solo conoce al Facade.',
-      'Los subsistemas se conocen entre sí.',
-      'Nadie los conoce, son privados.'
-    ],
-    correct: 1,
-    exp: 'El Facade tiene composición de los subsistemas y orquesta sus llamadas. El Cliente habla únicamente con la fachada, lo que simplifica drásticamente su código.'
-  },
-  {
-    q: 'En Factory Method, ¿qué tipo declara el método de fábrica como <strong>tipo de retorno</strong>?',
-    opts: [
-      'La clase concreta del producto (ej. <code>CreditCardPayment</code>).',
-      'La interfaz Producto (ej. <code>Payment</code>).',
-      '<code>Object</code>, para mayor flexibilidad.',
-      '<code>void</code> y luego se asigna a un atributo.'
-    ],
-    correct: 1,
-    exp: 'Devolver la interfaz Producto permite al cliente trabajar con cualquier producto concreto sin depender de su clase específica. Esto es lo que hace al patrón flexible.'
-  },
-  {
-    q: '¿A qué <strong>familia</strong> pertenece Singleton?',
-    opts: ['Creacional', 'Estructural', 'Comportamiento', 'No es un patrón GoF'],
-    correct: 0,
-    exp: 'Singleton es Creacional: resuelve un problema de creación de objetos (cuántas instancias y cómo se accede a ellas).'
-  },
-  {
-    q: '¿A qué <strong>familia</strong> pertenece Observer?',
-    opts: ['Creacional', 'Estructural', 'Comportamiento', 'Concurrencia'],
-    correct: 2,
-    exp: 'Observer es de Comportamiento: define cómo se comunican y notifican entre sí los objetos.'
-  },
-  {
-    q: 'En el ejercicio de fábrica de chocolates con líneas "premium" y "estándar", ¿qué patrón se usa para que las Tabletas, Bombones y Barras de una misma línea sean coherentes entre sí?',
-    opts: ['Singleton', 'Factory Method', 'Abstract Factory', 'Facade'],
-    correct: 2,
-    exp: 'Abstract Factory crea familias de productos relacionados que deben ser compatibles entre sí. Una <code>FabricaPremium</code> solo crea productos premium; una <code>FabricaEstandar</code>, productos estándar.'
-  },
-  {
-    q: '¿Cuál es la signatura típica del método de acceso en Singleton?',
-    opts: [
-      '<code>public Singleton getInstance() { ... }</code>',
-      '<code>private static Singleton getInstance() { ... }</code>',
-      '<code>public static Singleton getInstance() { ... }</code>',
-      '<code>public abstract Singleton getInstance() { ... }</code>'
-    ],
-    correct: 2,
-    exp: 'Debe ser <code>public</code> (acceso global), <code>static</code> (se llama sin instancia) y devolver el tipo Singleton. Si fuera privada o no estática, no podrías invocarla sin tener ya una instancia.'
-  },
-  {
-    q: 'En el patrón Adapter, ¿qué quiere decir que <strong>no se puede modificar la clase Adaptable</strong>?',
-    opts: [
-      'Que es una clase final en Java.',
-      'Que pertenece a una biblioteca externa o legacy, y debemos respetarla tal como está.',
-      'Que es una clase abstracta.',
-      'Que es privada.'
-    ],
-    correct: 1,
-    exp: 'En la práctica, el Adaptable suele ser una API externa, una clase legacy o una biblioteca de terceros. Por eso necesitamos un adaptador en lugar de cambiar la clase original.'
-  },
-  {
-    q: '¿Cuál de estos NO es uno de los métodos típicos del Subject en Observer?',
-    opts: ['<code>addObserver</code>', '<code>removeObserver</code>', '<code>notifyObservers</code>', '<code>update</code>'],
-    correct: 3,
-    exp: '<code>update</code> es el método que implementa el Observer (no el Subject). El Subject invoca <code>update(message)</code> sobre cada observador cuando notifica.'
-  },
-  {
-    q: 'En la <strong>práctica guiada de Facade</strong> con Restaurant, ¿qué método expone el Facade al cliente?',
-    opts: [
-      '<code>verificarMesaDisponible()</code>',
-      '<code>realizarPedido(String cliente, String platillo)</code>',
-      '<code>generarFactura(String cliente, String platillo)</code>',
-      '<code>registrarOrden(String platillo)</code>'
-    ],
-    correct: 1,
-    exp: 'El Facade expone un método único de alto nivel (<code>realizarPedido</code>) que internamente coordina a los subsistemas: <code>MesaService</code>, <code>CocinaService</code>, <code>FacturaService</code> y <code>NotificacionService</code>.'
-  }
-];
+      // === QUIZ ===
+      const quizQuestions = [
+        {
+          q: "¿Cuál es la <strong>diferencia clave</strong> entre Factory Method y Abstract Factory?",
+          opts: [
+            "Factory Method usa interfaces y Abstract Factory usa clases abstractas.",
+            "Factory Method crea un solo producto; Abstract Factory crea familias de productos relacionados.",
+            "Factory Method es creacional, Abstract Factory es estructural.",
+            "No hay diferencia, son sinónimos.",
+          ],
+          correct: 1,
+          exp: 'Factory Method delega la creación de un único producto a subclases. Abstract Factory crea familias de productos relacionados y compatibles entre sí (ej: todos los muebles "modernos" o todos los chocolates "premium").',
+        },
+        {
+          q: "¿Qué <strong>error</strong> rompe el patrón Singleton?",
+          opts: [
+            "Hacer el constructor <code>public</code>.",
+            "Usar <code>getInstance()</code> en vez de <code>new</code>.",
+            "Declarar el atributo <code>instance</code> como <code>static</code>.",
+            "Verificar <code>if (instance == null)</code> antes de crear.",
+          ],
+          correct: 0,
+          exp: "Si el constructor es público, cualquier clase puede hacer <code>new</code> y crear instancias adicionales, anulando la garantía de instancia única. El constructor debe ser <code>private</code>.",
+        },
+        {
+          q: "En el patrón <strong>Adapter</strong>, ¿qué relación tiene el Adaptador con la clase Adaptable?",
+          opts: [
+            "El Adaptador hereda de la clase Adaptable.",
+            "El Adaptador modifica la clase Adaptable.",
+            "El Adaptador envuelve a la clase Adaptable y traduce sus llamadas a la interfaz objetivo.",
+            "El Adaptador reemplaza completamente a la clase Adaptable.",
+          ],
+          correct: 2,
+          exp: "El Adaptador implementa la interfaz Objetivo y contiene una referencia (composición) al Adaptable. Cuando recibe una llamada en el formato objetivo, la traduce al formato que el Adaptable entiende. La clase Adaptable no se modifica.",
+        },
+        {
+          q: "¿Qué patrón aplicarías para un sistema con <strong>configuración global</strong> de juego (dificultad, vidas, velocidad de enemigos) que debe ser la misma en todos los subsistemas?",
+          opts: ["Factory Method", "Singleton", "Observer", "Facade"],
+          correct: 1,
+          exp: "Singleton garantiza una única instancia accesible globalmente. Todos los subsistemas llaman <code>GameConfig.getInstance()</code> y obtienen exactamente la misma configuración, evitando inconsistencias.",
+        },
+        {
+          q: "¿Qué patrón usa una <strong>lista de suscriptores</strong> que se notifican cuando cambia el estado?",
+          opts: ["Adapter", "Singleton", "Observer", "Factory Method"],
+          correct: 2,
+          exp: "Observer define una dependencia uno-a-muchos. El Subject mantiene una lista de Observers y llama <code>update()</code> en cada uno cuando su estado cambia.",
+        },
+        {
+          q: "Tienes una clase <code>WhatsAppAPI</code> con un método <code>sendWhatsApp(phoneNumber, text)</code> que no puedes modificar, pero el resto del sistema usa una interfaz <code>Messenger</code> con <code>sendMessage(msg)</code>. ¿Qué patrón aplicas?",
+          opts: ["Singleton", "Adapter", "Facade", "Abstract Factory"],
+          correct: 1,
+          exp: "Adapter. Creas un <code>WhatsAppAdapter</code> que implementa <code>Messenger</code> y, en <code>sendMessage</code>, llama internamente a <code>sendWhatsApp(phoneNumber, msg)</code>.",
+        },
+        {
+          q: "En Facade, ¿quién <strong>conoce a los subsistemas</strong>?",
+          opts: [
+            "El Cliente conoce todos los subsistemas.",
+            "El Facade conoce los subsistemas; el Cliente solo conoce al Facade.",
+            "Los subsistemas se conocen entre sí.",
+            "Nadie los conoce, son privados.",
+          ],
+          correct: 1,
+          exp: "El Facade tiene composición de los subsistemas y orquesta sus llamadas. El Cliente habla únicamente con la fachada, lo que simplifica drásticamente su código.",
+        },
+        {
+          q: "En Factory Method, ¿qué tipo declara el método de fábrica como <strong>tipo de retorno</strong>?",
+          opts: [
+            "La clase concreta del producto (ej. <code>CreditCardPayment</code>).",
+            "La interfaz Producto (ej. <code>Payment</code>).",
+            "<code>Object</code>, para mayor flexibilidad.",
+            "<code>void</code> y luego se asigna a un atributo.",
+          ],
+          correct: 1,
+          exp: "Devolver la interfaz Producto permite al cliente trabajar con cualquier producto concreto sin depender de su clase específica. Esto es lo que hace al patrón flexible.",
+        },
+        {
+          q: "¿A qué <strong>familia</strong> pertenece Singleton?",
+          opts: [
+            "Creacional",
+            "Estructural",
+            "Comportamiento",
+            "No es un patrón GoF",
+          ],
+          correct: 0,
+          exp: "Singleton es Creacional: resuelve un problema de creación de objetos (cuántas instancias y cómo se accede a ellas).",
+        },
+        {
+          q: "¿A qué <strong>familia</strong> pertenece Observer?",
+          opts: ["Creacional", "Estructural", "Comportamiento", "Concurrencia"],
+          correct: 2,
+          exp: "Observer es de Comportamiento: define cómo se comunican y notifican entre sí los objetos.",
+        },
+        {
+          q: 'En el ejercicio de fábrica de chocolates con líneas "premium" y "estándar", ¿qué patrón se usa para que las Tabletas, Bombones y Barras de una misma línea sean coherentes entre sí?',
+          opts: ["Singleton", "Factory Method", "Abstract Factory", "Facade"],
+          correct: 2,
+          exp: "Abstract Factory crea familias de productos relacionados que deben ser compatibles entre sí. Una <code>FabricaPremium</code> solo crea productos premium; una <code>FabricaEstandar</code>, productos estándar.",
+        },
+        {
+          q: "¿Cuál es la signatura típica del método de acceso en Singleton?",
+          opts: [
+            "<code>public Singleton getInstance() { ... }</code>",
+            "<code>private static Singleton getInstance() { ... }</code>",
+            "<code>public static Singleton getInstance() { ... }</code>",
+            "<code>public abstract Singleton getInstance() { ... }</code>",
+          ],
+          correct: 2,
+          exp: "Debe ser <code>public</code> (acceso global), <code>static</code> (se llama sin instancia) y devolver el tipo Singleton. Si fuera privada o no estática, no podrías invocarla sin tener ya una instancia.",
+        },
+        {
+          q: "En el patrón Adapter, ¿qué quiere decir que <strong>no se puede modificar la clase Adaptable</strong>?",
+          opts: [
+            "Que es una clase final en Java.",
+            "Que pertenece a una biblioteca externa o legacy, y debemos respetarla tal como está.",
+            "Que es una clase abstracta.",
+            "Que es privada.",
+          ],
+          correct: 1,
+          exp: "En la práctica, el Adaptable suele ser una API externa, una clase legacy o una biblioteca de terceros. Por eso necesitamos un adaptador en lugar de cambiar la clase original.",
+        },
+        {
+          q: "¿Cuál de estos NO es uno de los métodos típicos del Subject en Observer?",
+          opts: [
+            "<code>addObserver</code>",
+            "<code>removeObserver</code>",
+            "<code>notifyObservers</code>",
+            "<code>update</code>",
+          ],
+          correct: 3,
+          exp: "<code>update</code> es el método que implementa el Observer (no el Subject). El Subject invoca <code>update(message)</code> sobre cada observador cuando notifica.",
+        },
+        {
+          q: "En la <strong>práctica guiada de Facade</strong> con Restaurant, ¿qué método expone el Facade al cliente?",
+          opts: [
+            "<code>verificarMesaDisponible()</code>",
+            "<code>realizarPedido(String cliente, String platillo)</code>",
+            "<code>generarFactura(String cliente, String platillo)</code>",
+            "<code>registrarOrden(String platillo)</code>",
+          ],
+          correct: 1,
+          exp: "El Facade expone un método único de alto nivel (<code>realizarPedido</code>) que internamente coordina a los subsistemas: <code>MesaService</code>, <code>CocinaService</code>, <code>FacturaService</code> y <code>NotificacionService</code>.",
+        },
+      ];
 
-let quizAnswers = {};
+      let quizAnswers = {};
 
-function renderQuiz() {
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = '';
-  quizQuestions.forEach((q, i) => {
-    const div = document.createElement('div');
-    div.className = 'quiz-q';
-    div.innerHTML = `
-      <div class="q-num">Pregunta ${i+1}</div>
+      function renderQuiz() {
+        const container = document.getElementById("quiz-container");
+        container.innerHTML = "";
+        quizQuestions.forEach((q, i) => {
+          const div = document.createElement("div");
+          div.className = "quiz-q";
+          div.innerHTML = `
+      <div class="q-num">Pregunta ${i + 1}</div>
       <div class="q-text">${q.q}</div>
       <div class="options">
-        ${q.opts.map((opt, j) => `<div class="option" data-q="${i}" data-opt="${j}">${opt}</div>`).join('')}
+        ${q.opts.map((opt, j) => `<div class="option" data-q="${i}" data-opt="${j}">${opt}</div>`).join("")}
       </div>
       <div class="explanation" id="exp-${i}"><strong>Explicación:</strong> ${q.exp}</div>
     `;
-    container.appendChild(div);
-  });
+          container.appendChild(div);
+        });
 
-  document.querySelectorAll('.option').forEach(o => {
-    o.addEventListener('click', () => {
-      const qi = parseInt(o.dataset.q);
-      const oi = parseInt(o.dataset.opt);
-      if (quizAnswers[qi] !== undefined) return;
-      quizAnswers[qi] = oi;
-      const correct = quizQuestions[qi].correct;
-      document.querySelectorAll(`.option[data-q="${qi}"]`).forEach((el, idx) => {
-        el.classList.add('disabled');
-        if (idx === correct) el.classList.add('correct');
-        else if (idx === oi) el.classList.add('wrong');
+        document.querySelectorAll(".option").forEach((o) => {
+          o.addEventListener("click", () => {
+            const qi = parseInt(o.dataset.q);
+            const oi = parseInt(o.dataset.opt);
+            if (quizAnswers[qi] !== undefined) return;
+            quizAnswers[qi] = oi;
+            const correct = quizQuestions[qi].correct;
+            document
+              .querySelectorAll(`.option[data-q="${qi}"]`)
+              .forEach((el, idx) => {
+                el.classList.add("disabled");
+                if (idx === correct) el.classList.add("correct");
+                else if (idx === oi) el.classList.add("wrong");
+              });
+            document.getElementById(`exp-${qi}`).classList.add("show");
+            updateScore();
+          });
+        });
+      }
+
+      function updateScore() {
+        const total = quizQuestions.length;
+        const answered = Object.keys(quizAnswers).length;
+        const correct = Object.entries(quizAnswers).filter(
+          ([qi, oi]) => quizQuestions[qi].correct === parseInt(oi),
+        ).length;
+        if (answered === total) {
+          const scoreEl = document.getElementById("quiz-score");
+          scoreEl.classList.add("show");
+          document.getElementById("score-num").textContent =
+            `${correct} / ${total}`;
+          const pct = correct / total;
+          let msg = "";
+          if (pct >= 0.9) msg = "Dominio total. Estás listo para el examen.";
+          else if (pct >= 0.7)
+            msg = "Buen nivel. Repasa las preguntas que fallaste.";
+          else if (pct >= 0.5)
+            msg = "Vas en camino. Vuelve a las flashcards y al cheatsheet.";
+          else
+            msg =
+              "Necesita más estudio. Repasa cada patrón con su práctica guiada.";
+          document.getElementById("score-message").textContent = msg;
+        }
+      }
+
+      document.getElementById("reset-quiz").addEventListener("click", () => {
+        quizAnswers = {};
+        document.getElementById("quiz-score").classList.remove("show");
+        renderQuiz();
+        document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
       });
-      document.getElementById(`exp-${qi}`).classList.add('show');
-      updateScore();
-    });
-  });
-}
 
-function updateScore() {
-  const total = quizQuestions.length;
-  const answered = Object.keys(quizAnswers).length;
-  const correct = Object.entries(quizAnswers).filter(([qi, oi]) => quizQuestions[qi].correct === parseInt(oi)).length;
-  if (answered === total) {
-    const scoreEl = document.getElementById('quiz-score');
-    scoreEl.classList.add('show');
-    document.getElementById('score-num').textContent = `${correct} / ${total}`;
-    const pct = correct / total;
-    let msg = '';
-    if (pct >= 0.9) msg = 'Dominio total. Estás listo para el examen.';
-    else if (pct >= 0.7) msg = 'Buen nivel. Repasa las preguntas que fallaste.';
-    else if (pct >= 0.5) msg = 'Vas en camino. Vuelve a las flashcards y al cheatsheet.';
-    else msg = 'Necesita más estudio. Repasa cada patrón con su práctica guiada.';
-    document.getElementById('score-message').textContent = msg;
-  }
-}
-
-document.getElementById('reset-quiz').addEventListener('click', () => {
-  quizAnswers = {};
-  document.getElementById('quiz-score').classList.remove('show');
-  renderQuiz();
-  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
-});
-
-renderQuiz();
-</script>
-</body>
+      renderQuiz();
+    </script>
+  </body>
 </html>
